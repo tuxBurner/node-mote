@@ -11,35 +11,28 @@ class BaseBackendHandler extends BaseClass {
     this.backendName = backendName;
     this.settings = settings;
 
-    this.panelsSetup = require(baseDir + "/panels.json");
-
-    this.logDebug("Panels loaded: ", this.panelsSetup);
+    this.panelsHandler = require(baseDir + "/BackendPanels.js");
   }
 
   /**
    * Gets the panel with the given name
-   * @param panelName
+   * @param {string} panelName the name of the panel
    */
   getPanelByName(panelName) {
 
     if(panelName === undefined) {
-      panelName = this.getDefaultPanelName();
+      panelName = this.panelsHandler.getDefaultPanelName();
     }
 
     let panelToReturn = {
       backendName: this.backendName,
-      panelCfg: this.panelsSetup[panelName]
+      panelCfg: this.panelsHandler.getPanelForFrontend(panelName)
     }
 
     return panelToReturn;
   }
 
-  /**
-   * Return the default panels for this backend
-   */
-  getDefaultPanelName() {
-    this.logError("Implement me: " + this.getDefaultPanelName.name);
-  }
+
 
   /**
    * Handles the given action on the backend
@@ -53,6 +46,7 @@ class BaseBackendHandler extends BaseClass {
 
   /**
    * Gets the type of the backend
+   * @return {string} the type of the backend
    */
   getType() {
     return this.settings.type;

@@ -14,47 +14,63 @@ class GuiPanelsBuilder {
   buildNewPanels(cfg) {
 
 
-    var html = '';
-
     let backendName = cfg.backendName;
     let panelCfg = cfg.panelCfg;
 
-    // iterate over the rows
-    for(let rowIdx in panelCfg.rows) {
+    let html = this._handleComponents(backendName, panelCfg.components, 12);
 
-      html += '<div class="row">';
-
-      let col = 12 / panelCfg.rows[rowIdx].length;
-
-      for(let colIdx in panelCfg.rows[rowIdx]) {
-
-        html += '<div class="col s' + col + '">';
-
-        let panelContentCfg = panelCfg.rows[rowIdx][colIdx];
-        switch(panelContentCfg.type) {
-          case 'none' :
-            break;
-          case 'abtn' :
-            html += this._buildActionBtnHtml(panelContentCfg, backendName);
-            break;
-          default :
-            console.error('No panel entrance for the type: ' + panelContentCfg.type + ' found');
-        }
-        html += '</div>';
-      }
-
-      html += '</div>';
-    }
 
     $('#panel_content').html(html);
   }
 
-  /**
-   * Builds a button with the given cfg
-   * @param btnCfg
-   * @private
-   */
-  _buildActionBtnHtml(btnCfg, backendName) {
+  _handleComponents(backendName, components, col) {
+
+    let html = '';
+
+    for(let idx in components) {
+      let component = components[idx];
+      html += this._handleComponent(backendName, component, col);
+    }
+
+    return html;
+  }
+
+  _handleComponent(backendName, component, col) {
+
+    let html = '';
+
+    switch(component.type) {
+      case 'panel' :
+        html += this._handleComponents(backendName, component.components, col);
+        break;
+      case 'row' :
+        let newCol = 12 / component.components.length;
+        html += '<div class="row">';
+        html += this._handleComponents(backendName, component.components,newCol);
+        html += '</div>';
+        break;
+      case 'abutton' :
+        //html += this._buildActionBtnHtml(backendName, component);
+        const instance = this;
+        html += this._buildCol(col,function() {
+          return instance._buildActionBtnHtml(backendName, component);
+        });
+        break;
+    }
+
+    return html;
+  }
+
+  _buildCol(col,elementHtmlFunc) {
+    let html = '<div class="col s' + col + '">';
+    html += elementHtmlFunc();
+    html += '</div>';
+
+    return html;
+  }
+
+
+  _buildActionBtnHtml(backendName, btnCfg) {
     return '<a data-backend-name="' + backendName + '" data-backend-action="' + btnCfg.action + '" class="waves-effect waves-light btn-large"><i class="material-icons left">' + btnCfg.icon + '</i>' + btnCfg.txt + '</a>';
   }
 

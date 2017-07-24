@@ -6,6 +6,7 @@ const {BaseBackendHandler} = require('../../lib/BaseBackendHandler');
  */
 class XbmcBackendHandler extends BaseBackendHandler {
   constructor(backendName, settings) {
+
     super(backendName, settings, __dirname);
 
     this.logDebug('Loading ' + backendName, settings);
@@ -21,8 +22,25 @@ class XbmcBackendHandler extends BaseBackendHandler {
     this.settings = settings;
   }
 
-  getDefaultPanelName() {
-    return 'main';
+  
+
+  performAction(action, payload) {
+
+    // user wants to perform an input action
+    if(action.startsWith('Input.')) {
+      this.kodiRpc.rpc(action)
+      return;
+    }
+
+    /*switch(action) {
+      case 'Input.up' :
+        //this.kodiRpc.input.up();
+        this.kodiRpc.rpc('Input.Back')
+        break;
+      default:
+        this.logError("Cannot perform action: " + action, payload);
+    } */
+
   }
 }
 
