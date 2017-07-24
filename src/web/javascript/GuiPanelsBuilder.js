@@ -39,6 +39,8 @@ class GuiPanelsBuilder {
 
     let html = '';
 
+    const instance = this;
+
     switch(component.type) {
       case 'panel' :
         html += this._handleComponents(backendName, component.components, col);
@@ -46,14 +48,17 @@ class GuiPanelsBuilder {
       case 'row' :
         let newCol = 12 / component.components.length;
         html += '<div class="row">';
-        html += this._handleComponents(backendName, component.components,newCol);
+        html += this._handleComponents(backendName, component.components, newCol);
         html += '</div>';
         break;
       case 'abutton' :
-        //html += this._buildActionBtnHtml(backendName, component);
-        const instance = this;
-        html += this._buildCol(col,function() {
+        html += this._buildCol(col, function() {
           return instance._buildActionBtnHtml(backendName, component);
+        });
+        break;
+      case 'slider' :
+        html += this._buildCol(col, function() {
+          return instance._buildSliderHtml(backendName, component);
         });
         break;
     }
@@ -61,7 +66,7 @@ class GuiPanelsBuilder {
     return html;
   }
 
-  _buildCol(col,elementHtmlFunc) {
+  _buildCol(col, elementHtmlFunc) {
     let html = '<div class="col s' + col + '">';
     html += elementHtmlFunc();
     html += '</div>';
@@ -70,8 +75,12 @@ class GuiPanelsBuilder {
   }
 
 
-  _buildActionBtnHtml(backendName, btnCfg) {
-    return '<a data-backend-name="' + backendName + '" data-backend-action="' + btnCfg.action + '" class="waves-effect waves-light btn-large"><i class="material-icons left">' + btnCfg.icon + '</i>' + btnCfg.txt + '</a>';
+  _buildActionBtnHtml(backendName, componentCfg) {
+    return '<a data-backend-name="' + backendName + '" data-backend-action="' + componentCfg.action + '" class="waves-effect waves-light btn-large"><i class="material-icons left">' + componentCfg.icon + '</i>' + componentCfg.txt + '</a>';
+  }
+
+  _buildSliderHtml(backendName, componentCfg) {
+    return '<i class="material-icons left">' + componentCfg.icon + '</i><label>' + componentCfg.txt + '</label><p class="range-field"><input data-backend-name="' + backendName + '" data-backend-action="' + componentCfg.action + '"  type="range" min="' + componentCfg.min + '" max="' + componentCfg.max + '"/></p>';
   }
 
 }

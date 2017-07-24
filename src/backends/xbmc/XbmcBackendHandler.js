@@ -22,13 +22,22 @@ class XbmcBackendHandler extends BaseBackendHandler {
     this.settings = settings;
   }
 
-  
 
   performAction(action, payload) {
 
     // user wants to perform an input action
     if(action.startsWith('Input.')) {
       this.kodiRpc.rpc(action)
+      return;
+    }
+
+    if(action === 'SetVolume' && payload.val !== undefined) {
+      this.kodiRpc.application.setVolume(Number(payload.val));
+      return;
+    }
+
+    if(action === 'ToggleMute') {
+      this.kodiRpc.application.setMute();
       return;
     }
 

@@ -14,5 +14,16 @@ $(function() {
     websocketHandler.callBackendAction(backendName,action);
   });
 
+  /**
+   * List for all range changes
+   */
+  $(document).on('change','[type="range"]',function() {
+    let backendName = $(this).data('backendName');
+    let action = $(this).data('backendAction');
+    let rangeVal = $(this).val();
+
+    websocketHandler.callBackendAction(backendName,action,{val: rangeVal});
+  });
+
   $('.button-collapse').sideNav();
 });

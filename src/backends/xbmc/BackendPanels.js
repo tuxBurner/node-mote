@@ -18,22 +18,23 @@ class XbmcBackendPanels extends BaseBackendPanelHandler {
         new ActionButton('Input.Back', 'Back', 'settings_backup_restore')
       ])
       .addRow([
-          new ActionButton('Input.Left', 'Left', 'arrow_back'),
-          new ActionButton('Input.Select', 'Select', 'center_focus_strong'),
-          new ActionButton('Input.Right', 'Right', 'arrow_forward')
-        ])
+        new ActionButton('Input.Left', 'Left', 'arrow_back'),
+        new ActionButton('Input.Select', 'Select', 'center_focus_strong'),
+        new ActionButton('Input.Right', 'Right', 'arrow_forward')
+      ])
       .addRow([
-          new ActionButton('Input.Home', 'Home', 'home'),
-          new ActionButton('Input.Down', 'Down', 'arrow_downward'),
-          new ActionButton('Input.ContextMenu', 'Menu', 'menu')
-        ]);
+        new ActionButton('Input.Home', 'Home', 'home'),
+        new ActionButton('Input.Down', 'Down', 'arrow_downward'),
+        new ActionButton('Input.ContextMenu', 'Menu', 'menu')
+      ]);
     this._addPanel(defaultButtonsPanel);
 
     let volumePanel = new Panel('volumePanel');
     volumePanel
       .addRow([
-          new Slider('SetVolume', 'Vol', 'volume_mute', 0, 100)
-        ]);
+        new Slider('SetVolume', 'Vol', 'volume_mute', 0, 100),
+        new ActionButton('ToggleMute', 'Mute', 'volume_off')
+      ]);
     this._addPanel(volumePanel);
 
     let defaultPanel = new Panel('defaultsPanel');
