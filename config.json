@@ -1,0 +1,20 @@
+{
+  "webserver": {
+    "port": 3000
+  },
+  
+  "devices": {
+    "XBMC_LOCAL": {
+      "type": "xbmc",
+      "config": {
+        "host": "localhost:8080",
+        "user": "",
+        "pass": ""
+      }
+    }
+  },
+  "activities": {
+    "xbmc_music": {
+    }
+  }
+}

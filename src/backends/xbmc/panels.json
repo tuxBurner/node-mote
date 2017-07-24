@@ -1,0 +1,53 @@
+{
+  "main": {
+    "rows": [
+      [
+        {
+          "type": "none"
+        },
+        {
+          "type": "abtn",
+          "txt": "up",
+          "icon": "arrow_upward",
+          "action" : "Input.up"
+        },
+        {
+          "type": "none"
+        }
+      ],
+      [
+        {
+          "type": "abtn",
+          "txt": "left",
+          "icon": "arrow_left",
+          "action" : "Input.left"
+        },
+        {
+          "type": "abtn",
+          "txt": "ok",
+          "icon": "center_focus_strong"
+        },
+        {
+          "type": "abtn",
+          "txt": "right",
+          "icon": "arrow_right",
+          "action" : "Input.right"
+        }
+      ],
+      [
+        {
+          "type": "none"
+        },
+        {
+          "type": "abtn",
+          "txt": "down",
+          "icon": "arrow_downward",
+          "action" : "Input.down"
+        },
+        {
+          "type": "none"
+        }
+      ]
+    ]
+  }
+}

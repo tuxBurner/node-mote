@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Node Mote</title>
+
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css" media="screen,projection"/>
+
+    <link type="text/css" rel="stylesheet" href="main.css" media="screen,projection"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+
+<body>
+<nav>
+
+</nav>
+
+
+<div class="container">
+
+    <ul id="left-slide-nav" class="side-nav">
+       <!-- Content is filled via WebSocketGuiHandler._buildSideNav -->
+    </ul>
+
+    <a href="#" data-activates="left-slide-nav" class="button-collapse"><i class="material-icons">menu</i></a>
+
+    <div id="panel_content">
+      <!-- Content is filled via GuiPanelsBuilder.buildNewPanels -->
+    </div>
+
+    
+
+
+</div>
+
+
+<!--Import jQuery before materialize.js-->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="javascript/WebSocketGuiHandler.js"></script>
+<script type="text/javascript" src="javascript/GuiPanelsBuilder.js"></script>
+<script type="text/javascript" src="javascript/main.js"></script>
+</body>
+</html>

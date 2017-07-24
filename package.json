@@ -1,0 +1,21 @@
+{
+  "name": "node-mote",
+  "version": "1.0.0",
+  "description": "A remote written in node mainly for the raspberry pi",
+  "main": "nodeMote.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "tuxBurner",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.3",
+    "materialize-css": "^0.100.0",
+    "node-kodi": "0.0.1-alpha",
+    "socket.io": "^2.0.3",
+    "winston": "^2.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}
