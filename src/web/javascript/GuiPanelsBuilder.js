@@ -80,7 +80,11 @@ class GuiPanelsBuilder {
   }
 
   _buildSliderHtml(backendName, componentCfg) {
-    return '<i class="material-icons left">' + componentCfg.icon + '</i><label>' + componentCfg.txt + '</label><p class="range-field"><input data-backend-name="' + backendName + '" data-backend-action="' + componentCfg.action + '"  type="range" min="' + componentCfg.min + '" max="' + componentCfg.max + '"/></p>';
+    let html = '<i class="material-icons left">' + componentCfg.icon + '</i><label>' + componentCfg.txt + '</label><p class="range-field">';
+    html += '<input data-backend-name="' + backendName + '" data-backend-action="' + componentCfg.action + '"  type="range" min="' + componentCfg.min + '" max="' + componentCfg.max + '" step="' + componentCfg.step + '"/>';
+    html += '</p>';
+
+    return html;
   }
 
 }

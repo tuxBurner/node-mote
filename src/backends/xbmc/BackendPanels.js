@@ -32,7 +32,7 @@ class XbmcBackendPanels extends BaseBackendPanelHandler {
     let volumePanel = new Panel('volumePanel');
     volumePanel
       .addRow([
-        new Slider('SetVolume', 'Vol', 'volume_mute', 0, 100),
+        new Slider('SetVolume', 'Vol', 'volume_mute', 0, 100,5),
         new ActionButton('ToggleMute', 'Mute', 'volume_off')
       ]);
     this._addPanel(volumePanel);
