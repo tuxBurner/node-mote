@@ -92,7 +92,7 @@ class Webserver extends BaseClass {
           panelsCfg = instance.backendRegistry.getPanelsForBackend(msg.name, msg.panelName);
         }
 
-        instance.logDebug('Found panels cfg: ', panelsCfg);
+        //instance.logDebug('Found panels cfg: ', panelsCfg);
         socket.emit('panels', panelsCfg);
       });
 

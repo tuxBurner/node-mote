@@ -3,6 +3,7 @@ const {Panel} = require('../../panels/Panel');
 const {Row} = require('../../panels/Row');
 const {ActionButton} = require('../../panels/ActionButton');
 const {Slider} = require('../../panels/Slider');
+const {Switch} = require('../../panels/Switch');
 
 class XbmcBackendPanels extends BaseBackendPanelHandler {
 
@@ -32,8 +33,8 @@ class XbmcBackendPanels extends BaseBackendPanelHandler {
     let volumePanel = new Panel('volumePanel');
     volumePanel
       .addRow([
-        new Slider('SetVolume', 'Vol', 'volume_mute', 0, 100,5),
-        new ActionButton('ToggleMute', 'Mute', 'volume_off')
+        new Slider('Application.SetVolume', 'Vol', 'volume_mute', 0, 100,5),
+        new Switch('Application.SetMute','volume_off', 'Mute', true, 'Loud', false)
       ]);
     this._addPanel(volumePanel);
 

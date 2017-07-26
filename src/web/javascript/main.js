@@ -25,5 +25,16 @@ $(function() {
     websocketHandler.callBackendAction(backendName,action,{val: rangeVal});
   });
 
+  $(document).on('change',':checkbox',function() {
+    let checked = $(this).prop('checked');
+    let valToSet = (checked === true) ? $(this).data('onVal') : $(this).data('offVal');
+    let backendName = $(this).data('backendName');
+    let action = $(this).data('backendAction');
+
+    websocketHandler.callBackendAction(backendName,action,{val: valToSet});
+  });
+
+
+
   $('.button-collapse').sideNav();
 });

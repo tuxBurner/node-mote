@@ -7,9 +7,8 @@
     "XBMC_LOCAL": {
       "type": "xbmc",
       "config": {
-        "host": "localhost:8080",
-        "user": "",
-        "pass": ""
+        "host": "localhost",
+        "port": "9090"
       }
     }
   },
