@@ -5,8 +5,9 @@ const {ActionComponent} = require('./ActionComponent');
  */
 class ActionButton extends ActionComponent {
 
-  constructor(action, txt, icon) {
+  constructor(action, txt, icon, value) {
     super('abutton', action, txt, icon);
+    this.value = value || '';
   }
 
 }

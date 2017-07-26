@@ -9,6 +9,8 @@ class WebSocketGuiHandler {
 
     this.panelsBuilder = panelsBuilder;
 
+    this.panelsBuilder.setWebSocketHandler(this);
+
     const instance = this;
 
     this.socket.on('config', function(msg) {
@@ -21,7 +23,7 @@ class WebSocketGuiHandler {
      * When we got some new panels redraw the panels
      */
     this.socket.on('panels', function(msg) {
-      panelsBuilder.buildNewPanels(msg);
+      instance.panelsBuilder.buildNewPanels(msg);
     });
   }
 

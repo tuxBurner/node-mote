@@ -1,9 +1,9 @@
 const {BaseBackendPanelHandler} = require('../../lib/BaseBackendPanelHandler');
 const {Panel} = require('../../panels/Panel');
-const {Row} = require('../../panels/Row');
 const {ActionButton} = require('../../panels/ActionButton');
 const {Slider} = require('../../panels/Slider');
 const {Switch} = require('../../panels/Switch');
+const {Swipe} = require('../../panels/Swipe');
 
 class XbmcBackendPanels extends BaseBackendPanelHandler {
 
@@ -14,33 +14,47 @@ class XbmcBackendPanels extends BaseBackendPanelHandler {
     let defaultButtonsPanel = new Panel('defaultButtonsPanel');
     defaultButtonsPanel
       .addRow([
-        new ActionButton('Input.Info', 'Info', 'info'),
-        new ActionButton('Input.Up', 'Up', 'arrow_upward'),
-        new ActionButton('Input.Back', 'Back', 'settings_backup_restore')
+        new ActionButton('Input.ExecuteAction', 'Info', 'info', 'info'),
+        new ActionButton('Input.ExecuteAction', 'Up', 'arrow_upward', 'up'),
+        new ActionButton('Input.ExecuteAction', 'Back', 'settings_backup_restore', 'back')
       ])
       .addRow([
-        new ActionButton('Input.Left', 'Left', 'arrow_back'),
-        new ActionButton('Input.Select', 'Select', 'center_focus_strong'),
-        new ActionButton('Input.Right', 'Right', 'arrow_forward')
+        new ActionButton('Input.ExecuteAction', 'Left', 'arrow_back', 'left'),
+        new ActionButton('Input.ExecuteAction', 'Select', 'center_focus_strong', 'select'),
+        new ActionButton('Input.ExecuteAction', 'Right', 'arrow_forward', 'right')
       ])
       .addRow([
         new ActionButton('Input.Home', 'Home', 'home'),
-        new ActionButton('Input.Down', 'Down', 'arrow_downward'),
-        new ActionButton('Input.ContextMenu', 'Menu', 'menu')
+        new ActionButton('Input.ExecuteAction', 'Down', 'arrow_downward', 'down'),
+        new ActionButton('Input.ExecuteAction', 'Menu', 'menu', 'menu')
       ]);
     this._addPanel(defaultButtonsPanel);
 
     let volumePanel = new Panel('volumePanel');
     volumePanel
       .addRow([
-        new Slider('Application.SetVolume', 'Vol', 'volume_mute', 0, 100,5),
-        new Switch('Application.SetMute','volume_off', 'Mute', true, 'Loud', false)
+        new Slider('Application.SetVolume', 'Vol', 'volume_mute', 0, 100, 5),
+        new Switch('Application.SetMute', 'volume_off', 'Mute', true, 'Loud', false)
       ]);
     this._addPanel(volumePanel);
+
+    let swipePanel = new Panel('swipePanel');
+    let swipeInput = new Swipe();
+    swipeInput
+      .addLeftAction('Input.ExecuteAction', 'left')
+      .addRightAction('Input.ExecuteAction', 'right')
+      .addUpAction('Input.ExecuteAction', 'up')
+      .addDownAction('Input.ExecuteAction', 'down');
+
+    swipePanel
+      .addRow([swipeInput]);
+    this._addPanel(swipePanel);
+
 
     let defaultPanel = new Panel('defaultsPanel');
     defaultPanel
       .addRow([defaultButtonsPanel])
+      .addRow([swipePanel])
       .addRow([volumePanel]);
 
     this._addDefaultPanel(defaultPanel);

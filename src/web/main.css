@@ -1,3 +1,7 @@
 .btn-large {
     min-width: 100%;
 }
+
+.card {
+    min-height: 200px;
+}
