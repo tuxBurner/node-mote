@@ -1,4 +1,4 @@
-(kicad_pcb (version 4) (host pcbnew 4.0.5+dfsg1-4)
+(kicad_pcb (version 4) (host pcbnew 4.0.7-e1-6374~58~ubuntu17.04.1)
 
   (general
     (links 27)
@@ -319,7 +319,7 @@
     )
   )
 
-  (module Resistors_Universal:Resistor_SMD+THTuniversal_1206_RM10_HandSoldering (layer F.Cu) (tedit 597EDD8F) (tstamp 597DD8B0)
+  (module Resistors_Universal:Resistor_SMD+THTuniversal_1206_RM10_HandSoldering (layer F.Cu) (tedit 597EE541) (tstamp 597DD8B0)
     (at 157.48 109.22 90)
     (descr "Resistor, SMD+THT, universal, 1206, RM10, HandSoldering,")
     (tags "Resistor, SMD+THT, universal, 1206, RM10, Hand soldering,")
@@ -339,7 +339,7 @@
       (net 4 GND))
     (pad 1 thru_hole circle (at -5.00126 0 90) (size 2 2) (drill 0.8) (layers *.Cu *.Mask)
       (net 11 "Net-(P1-Pad6)"))
-    (pad 2 thru_hole rect (at 5.00126 0 90) (size 1.99898 1.99898) (drill 1.00076) (layers *.Cu *.Mask)
+    (pad 2 thru_hole circle (at 5.00126 0 90) (size 2 2) (drill 0.8) (layers *.Cu *.Mask)
       (net 4 GND))
   )
 
