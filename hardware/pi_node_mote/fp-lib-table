@@ -1,0 +1,5 @@
+(fp_lib_table
+  (lib (name Kicad-Libraries-Makerlab)(type KiCad)(uri "$(KIPRJMOD)/Kicad-Libraries-Makerlab")(options "")(descr ""))
+  (lib (name L293D)(type Legacy)(uri "$(KIPRJMOD)/L293D/L293D.mod")(options "")(descr ""))
+  (lib (name makerlab)(type KiCad)(uri "$(KIPRJMOD)/Kicad-Libraries-Makerlab/makerlab.pretty")(options "")(descr ""))
+)
