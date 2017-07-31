@@ -44,7 +44,8 @@ class XbmcBackendPanels extends BaseBackendPanelHandler {
       .addLeftAction('Input.ExecuteAction', 'left')
       .addRightAction('Input.ExecuteAction', 'right')
       .addUpAction('Input.ExecuteAction', 'up')
-      .addDownAction('Input.ExecuteAction', 'down');
+      .addDownAction('Input.ExecuteAction', 'down')
+      .addTapAction('Input.ExecuteAction', 'select');
 
     swipePanel
       .addRow([swipeInput]);

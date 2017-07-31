@@ -68,7 +68,7 @@ class GuiPanelsBuilder {
       instance.websocketHandler.callBackendAction(backendName, action, {val: valToSet});
     });
 
-    $('.swipe').hammer({recognizers: [[Hammer.Swipe, {direction: Hammer.DIRECTION_ALL}]]}).bind("swipeleft swiperight swipeup swipedown", function(e) {
+    $('.swipe').hammer({recognizers: [[Hammer.Tap],[Hammer.Swipe, {direction: Hammer.DIRECTION_ALL}]]}).bind("swipeleft swiperight swipeup swipedown tap", function(e) {
       let backendName = $(this).data('backendName');
       let action = $(this).data(e.type + 'Action');
       let value = $(this).data(e.type + 'Val');
@@ -212,6 +212,9 @@ class GuiPanelsBuilder {
 
     html += 'data-swipedown-action="' + componentCfg.downAction.action + '"';
     html += 'data-swipedown-val="' + componentCfg.downAction.value + '"';
+
+    html += 'data-tap-action="' + componentCfg.tapAction.action + '"';
+    html += 'data-tap-val="' + componentCfg.tapAction.value + '"';
 
     html += '></div>';
 

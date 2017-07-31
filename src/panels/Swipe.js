@@ -8,6 +8,7 @@ class Swipe extends BaseComponent {
     this.rightAction = null;
     this.upAction = null;
     this.downAction = null;
+    this.tapAction = null;
   }
 
   addUpAction(action, value) {
@@ -27,6 +28,11 @@ class Swipe extends BaseComponent {
 
   addRightAction(action, value) {
     this.rightAction = new SwipeAction(action, value);
+    return this;
+  }
+
+  addTapAction(action, value) {
+    this.tapAction = new SwipeAction(action, value);
     return this;
   }
 }
