@@ -21,23 +21,140 @@ class GuiPanelsBuilder {
     let backendName = cfg.backendName;
     let panelCfg = cfg.panelCfg;
 
-    let html = this._handleComponents(backendName, panelCfg.components, 12);
 
+    let parent = $('#panel_content');
+    $(parent).empty();
+    console.error(panelCfg.components);
+    this._handleComponents(parent, backendName, panelCfg.components, 12);
 
-    $('#panel_content').html(html);
-
-    this._registerEvenetsOnComponents();
-
+    //let html = this._handleComponents(backendName, panelCfg.components, 12);
+    //$('#panel_content').html(html);
+    //this._registerEvenetsOnComponents();
   }
 
-  _registerEvenetsOnComponents() {
+
+  /**
+   * Handles the data which is send when the backend state changed
+   * @param stateData
+   */
+  handleBackendState(stateData) {
+    // get all components which match the backend name
+    let backendComponents = $('[data-backend-name="' + stateData.backendName + '"]')
+  }
+
+
+  /**
+   * Handles the components of a sub component
+   * @param parent
+   * @param backendName
+   * @param components
+   * @param col
+   * @private
+   */
+  _handleComponents(parent, backendName, components, col) {
+    for(let idx in components) {
+      let component = components[idx];
+      this._handleComponent(parent, backendName, component, col);
+    }
+  }
+
+  /**
+   * Handles a single gui component
+   * @param parent
+   * @param backendName
+   * @param component
+   * @param col
+   * @private
+   */
+  _handleComponent(parent, backendName, component, col) {
+
+    // the generated component dom obj
+    let componentObj = null;
+
+    switch(component.type) {
+      case 'row' :
+        componentObj = this._buildRow(backendName, component);
+        break;
+      case 'panel' :
+        componentObj = this._buildPanel(backendName, col, component);
+        break;
+      case 'abutton' :
+        componentObj = this._buildCol(col, this._buildActionBtn(component, backendName));
+        break;
+      case 'slider' :
+        componentObj = this._buildCol(col, this._buildSlider(component, backendName));
+        break;
+      case 'switch' :
+        componentObj = this._buildCol(col, this._buildSwitch(component, backendName));
+        break;
+      case 'swipe' :
+        componentObj = this._buildCol(col, this._buildSwipe(component, backendName));
+        break;
+    }
+
+
+    $(parent).append(componentObj);
+  }
+
+  _buildRow(backendName, component) {
+    let newCol = 12 / component.components.length;
+    let html = '<div class="row">';
+    html += '</div>';
+    let componentObj = $(html);
+
+    // add the sub component objects to the gui
+    this._handleComponents(componentObj, backendName, component.components, newCol);
+
+    return componentObj;
+  }
+
+  _buildPanel(backendName, col, component) {
+    let componentObj = this._buildCol(col);
+
+    this._handleComponents(componentObj, backendName, component.components, col);
+
+    return componentObj;
+  }
+
+  _buildCol(col, innerComponent) {
+    let html = '<div class="col s' + col + '">';
+    html += '</div>';
+    let componentObj = $(html);
+
+    if(innerComponent !== undefined) {
+      $(componentObj).append(innerComponent);
+    }
+
+    return componentObj;
+  }
+
+  _addBackendData(componentObj, componentCfg, backendName) {
+    $(componentObj).data('backendName', backendName);
+    if(componentCfg.action !== undefined) {
+      $(componentObj).data('backendAction', componentCfg.action);
+    }
+  }
+
+
+  /**
+   *  Builds a simple action button
+   * @param componentCfg
+   * @param col
+   * @return {*|jQuery|HTMLElement}
+   * @private
+   */
+  _buildActionBtn(componentCfg, backendName) {
+
+    let html = '<a class="waves-effect waves-light btn-large"><i class="material-icons left">' + componentCfg.icon + '</i>' + componentCfg.txt + '</a>';
+
+    let componentObj = $(html);
+
+    $(componentObj).data('value', componentCfg.value);
+    this._addBackendData(componentObj, componentCfg, backendName);
 
     const instance = this;
 
-    /**
-     * Listen on all events for buttons
-     */
-    $('.btn-large').on('click', function() {
+    $(componentObj).on('click', function() {
       let backendName = $(this).data('backendName');
       let action = $(this).data('backendAction');
       let value = $(this).data('value');
@@ -45,178 +162,113 @@ class GuiPanelsBuilder {
       instance.websocketHandler.callBackendAction(backendName, action, {val: value});
     });
 
-    /**
-     * Listen for all range changes
-     */
-    $('[type="range"]').on('change', function() {
-      let backendName = $(this).data('backendName');
-      let action = $(this).data('backendAction');
-      let rangeVal = $(this).val();
-
-      instance.websocketHandler.callBackendAction(backendName, action, {val: rangeVal});
-    });
-
-    /**
-     * Listen on all checkbox changes
-     */
-    $(':checkbox').on('change', function() {
-      let checked = $(this).prop('checked');
-      let valToSet = (checked === true) ? $(this).data('onVal') : $(this).data('offVal');
-      let backendName = $(this).data('backendName');
-      let action = $(this).data('backendAction');
-
-      instance.websocketHandler.callBackendAction(backendName, action, {val: valToSet});
-    });
-
-    $('.swipe').hammer({recognizers: [[Hammer.Tap],[Hammer.Swipe, {direction: Hammer.DIRECTION_ALL}]]}).bind("swipeleft swiperight swipeup swipedown tap", function(e) {
-      let backendName = $(this).data('backendName');
-      let action = $(this).data(e.type + 'Action');
-      let value = $(this).data(e.type + 'Val');
-
-      instance.websocketHandler.callBackendAction(backendName, action, {val: value});
-
-      return true;
-    });
-  }
-
-  _handleComponents(backendName, components, col) {
-
-    let html = '';
-
-    for(let idx in components) {
-      let component = components[idx];
-      html += this._handleComponent(backendName, component, col);
-    }
-
-    return html;
-  }
-
-  _handleComponent(backendName, component, col) {
-
-    let html = '';
-
-    const instance = this;
-
-    switch(component.type) {
-      case 'panel' :
-        html += this._buildCol(col, function() {
-          return instance._handleComponents(backendName, component.components, col);
-        });
-        break;
-      case 'row' :
-        let newCol = 12 / component.components.length;
-        html += '<div class="row">';
-        html += this._handleComponents(backendName, component.components, newCol);
-        html += '</div>';
-        break;
-      case 'abutton' :
-        html += this._buildCol(col, function() {
-          return instance._buildActionBtnHtml(backendName, component);
-        });
-        break;
-      case 'slider' :
-        html += this._buildCol(col, function() {
-          return instance._buildSliderHtml(backendName, component);
-        });
-        break;
-      case 'switch' :
-        html += this._buildCol(col, function() {
-          return instance._buildSwitchHtml(backendName, component);
-        });
-        break;
-
-      case 'swipe' :
-        html += this._buildCol(col, function() {
-          return instance._buildSwipeHtml(backendName, component);
-        });
-        break;
-    }
-
-    return html;
-  }
-
-  _buildCol(col, elementHtmlFunc) {
-    let html = '<div class="col s' + col + '">';
-    html += elementHtmlFunc();
-    html += '</div>';
-
-    return html;
-  }
-
-
-  /**
-   * Builds a simple action button
-   * @param backendName
-   * @param componentCfg
-   * @return {string}
-   * @private
-   */
-  _buildActionBtnHtml(backendName, componentCfg) {
-    return '<a data-backend-name="' + backendName + '" data-backend-action="' + componentCfg.action + '" data-value="' + componentCfg.value + '" class="waves-effect waves-light btn-large"><i class="material-icons left">' + componentCfg.icon + '</i>' + componentCfg.txt + '</a>';
+    return componentObj;
   }
 
   /**
    * Builds a slider
-   * @param backendName
    * @param componentCfg
-   * @return {string}
+   * @param backendName
+   * @return {*|jQuery|HTMLElement}
    * @private
    */
-  _buildSliderHtml(backendName, componentCfg) {
-    let html = '<i class="material-icons left">' + componentCfg.icon + '</i><label>' + componentCfg.txt + '</label><p class="range-field">';
-    html += '<input data-backend-name="' + backendName + '" data-backend-action="' + componentCfg.action + '"  type="range" min="' + componentCfg.min + '" max="' + componentCfg.max + '" step="' + componentCfg.step + '"/>';
-    html += '</p>';
+  _buildSlider(componentCfg, backendName) {
+    let componentObj = $('<div><i class="material-icons left">' + componentCfg.icon + '</i><label>' + componentCfg.txt + '</label></div>');
+    let inputWrapperObj = $('<p class="range-field"></p>');
 
-    return html;
+
+    let inputObj = $('<input type="range" min="' + componentCfg.min + '" max="' + componentCfg.max + '" step="' + componentCfg.step + '"/>');
+    this._addBackendData(inputObj, componentCfg, backendName);
+
+    const instance = this;
+    $(inputObj).on('change', function() {
+      let backendName = $(this).data('backendName');
+      let action = $(this).data('backendAction');
+      let rangeVal = $(this).val();
+      instance.websocketHandler.callBackendAction(backendName, action, {val: rangeVal});
+    });
+
+
+    $(inputWrapperObj).append(inputObj);
+    $(componentObj).append(inputWrapperObj);
+    return componentObj;
   }
+
 
   /**
    * Builds a switch
-   * @param backendName
+   *
    * @param componentCfg
-   * @return {string}
+   * @param backendName
+   * @return {*|jQuery|HTMLElement}
    * @private
    */
-  _buildSwitchHtml(backendName, componentCfg) {
-    let html = '<i class="material-icons left">' + componentCfg.icon + '</i>';
-    html += '<div class="switch">';
-    html += '<label>' + componentCfg.txt;
-    html += '<input type="checkbox" data-backend-name="' + backendName + '"  data-backend-action="' + componentCfg.action + '" data-off-val="' + componentCfg.firstVal + '" data-on-val="' + componentCfg.secondVal + '" >';
-    html += '<span class="lever"></span>';
-    html += componentCfg.txt2 + '</label>';
-    html += '</div>';
+  _buildSwitch(componentCfg, backendName) {
 
-    return html;
+    let componentObj = $('<div><i class="material-icons left">' + componentCfg.icon + '</i></div>');
+
+    let switchWrapperObj = $('<div class="switch"></div>');
+
+    let switchLabelObj = $('<label>' + componentCfg.txt + '</label>')
+
+    let inputObj = $('<input type="checkbox" data-off-val="' + componentCfg.firstVal + '" data-on-val="' + componentCfg.secondVal + '" >');
+    this._addBackendData(inputObj, componentCfg, backendName);
+    $(inputObj).data('offVal', componentCfg.firstVal);
+    $(inputObj).data('onVal', componentCfg.secondVal);
+
+    const instance = this;
+    $(inputObj).on('change', function() {
+      let checked = $(this).prop('checked');
+      let valToSet = (checked === true) ? $(this).data('onVal') : $(this).data('offVal');
+      let backendName = $(this).data('backendName');
+      let action = $(this).data('backendAction');
+      instance.websocketHandler.callBackendAction(backendName, action, {val: valToSet});
+    });
+
+    $(switchLabelObj).append(inputObj);
+    $(switchLabelObj).append('<span class="lever"></span>' + componentCfg.txt2);
+    $(switchWrapperObj).append(switchLabelObj);
+    $(componentObj).append(switchWrapperObj);
+
+
+    return componentObj;
   }
 
   /**
    * Builds a swipe input
-   * @param backendName
    * @param componentCfg
-   * @return {string}
+   * @param backendName
+   * @return {*|jQuery|HTMLElement}
    * @private
    */
-  _buildSwipeHtml(backendName, componentCfg) {
-    let html = '<div class="swipe blue-grey darken-1" data-backend-name="' + backendName + '" ';
+  _buildSwipe(componentCfg, backendName) {
 
-    html += 'data-swipeleft-action="' + componentCfg.leftAction.action + '"';
-    html += 'data-swipeleft-val="' + componentCfg.leftAction.value + '"';
 
-    html += 'data-swiperight-action="' + componentCfg.rightAction.action + '"';
-    html += 'data-swiperight-val="' + componentCfg.rightAction.value + '"';
+    let componentObj = $('<div class="swipe blue-grey darken-1"></div>');
+    this._addBackendData(componentObj, componentCfg, backendName);
 
-    html += 'data-swipeup-action="' + componentCfg.upAction.action + '"';
-    html += 'data-swipeup-val="' + componentCfg.upAction.value + '"';
+    $(componentObj)
+      .data('swipeleft', componentCfg.leftAction)
+      .data('swiperight', componentCfg.rightAction)
+      .data('swipedown', componentCfg.downAction)
+      .data('swipeup', componentCfg.upAction)
+      .data('tap',componentCfg.tapAction);
 
-    html += 'data-swipedown-action="' + componentCfg.downAction.action + '"';
-    html += 'data-swipedown-val="' + componentCfg.downAction.value + '"';
 
-    html += 'data-tap-action="' + componentCfg.tapAction.action + '"';
-    html += 'data-tap-val="' + componentCfg.tapAction.value + '"';
+    const instance = this;
 
-    html += '></div>';
+    $(componentObj).hammer({recognizers: [[Hammer.Tap], [Hammer.Swipe, {direction: Hammer.DIRECTION_ALL}]]}).bind("swipeleft swiperight swipeup swipedown tap", function(e) {
+      let backendName = $(this).data('backendName');
 
-    return html;
+      let actionData = $(this).data(e.type);
+
+      instance.websocketHandler.callBackendAction(backendName, actionData.action, {val: actionData.value});
+
+      return true;
+    });
+
+
+    return componentObj;
   }
 
 }

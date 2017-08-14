@@ -12,7 +12,7 @@ class UpdateValueComponentEvent extends BaseComponentEvent {
    * @param value
    */
   constructor(keyToListen) {
-    super('shownOn');
+    super('updateValue');
     this.keyToListen = keyToListen;
   }
 }

@@ -25,6 +25,13 @@ class WebSocketGuiHandler {
     this.socket.on('panels', function(msg) {
       instance.panelsBuilder.buildNewPanels(msg);
     });
+
+    /**
+     * When we get a new state of a backend
+     */
+    this.socket.on('backendState', function(data) {
+       instance.panelsBuilder.handleBackendState(data);
+    });
   }
 
   /**

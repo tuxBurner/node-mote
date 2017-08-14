@@ -111,7 +111,7 @@ class Webserver extends BaseClass {
    * @param payload the data to send 
    */
   sendBackendState(payload) {
-    this.logDebug("Sending state data for backend: " + payload.backendName, payload.data);
+    this.logDebug('Sending state data for backend: ' + payload.backendName, payload.data);
 
     this.socketIo.emit('backendState', payload);
   }
