@@ -154,7 +154,7 @@ class GuiPanelsBuilder {
   _addBackendData(componentObj, componentCfg, backendName) {
     $(componentObj)
       .data('backendName', backendName)
-      .data('componentCfg',componentCfg)
+      .data('componentCfg', componentCfg)
       .addClass('backendComponent');
   }
 
@@ -215,9 +215,15 @@ class GuiPanelsBuilder {
       $(inputObj).on('backendStateChanged' + backendName, function(e, stateData) {
         let componentCfg = $(this).data('componentCfg');
 
-        $.each(componentCfg.events,function(idx,compEvent) {
+        $.each(componentCfg.events, function(idx, compEvent) {
           if(compEvent.type === 'updateValue') {
             $(e.target).val(stateData[compEvent.keyToListen]);
+          }
+
+          if(compEvent.type === 'disableOn') {
+            let currentBackendState = stateData[compEvent.keyToListen];
+            let disable = ($.inArray(currentBackendState, compEvent.valuesToDisableOn) !== -1);
+            $(e.target).prop("disabled", disable);
           }
         });
 
@@ -248,17 +254,30 @@ class GuiPanelsBuilder {
 
     let inputObj = $('<input type="checkbox" data-off-val="' + componentCfg.firstVal + '" data-on-val="' + componentCfg.secondVal + '" >');
     this._addBackendData(inputObj, componentCfg, backendName);
-    $(inputObj).data('offVal', componentCfg.firstVal);
-    $(inputObj).data('onVal', componentCfg.secondVal);
 
     const instance = this;
     $(inputObj).on('change', function() {
       let checked = $(this).prop('checked');
-      let valToSet = (checked === true) ? $(this).data('onVal') : $(this).data('offVal');
+      let componentCfg = $(this).data('componentCfg');
+      let valToSet = (checked === true) ? componentCfg.secondVal : componentCfg.firstVal;
       let backendName = $(this).data('backendName');
-      let action = $(this).data('componentCfg').action;
+      let action = componentCfg.action;
       instance.websocketHandler.callBackendAction(backendName, action, {val: valToSet});
     });
+
+    if(componentCfg.events.length !== 0) {
+      $(inputObj).on('backendStateChanged' + backendName, function(e, stateData) {
+        let componentCfg = $(this).data('componentCfg');
+
+        $.each(componentCfg.events, function(idx, compEvent) {
+          if(compEvent.type === 'updateValue') {
+            let checked =  componentCfg.secondVal === stateData[compEvent.keyToListen] ;
+            $(e.target).prop('checked',checked);
+          }
+        });
+
+      });
+    }
 
     $(switchLabelObj).append(inputObj);
     $(switchLabelObj).append('<span class="lever"></span>' + componentCfg.txt2);

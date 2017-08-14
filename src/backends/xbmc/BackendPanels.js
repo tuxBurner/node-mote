@@ -5,6 +5,7 @@ const {Slider} = require('../../panels/Slider');
 const {Switch} = require('../../panels/Switch');
 const {Swipe} = require('../../panels/Swipe');
 const {UpdateValueComponentEvent} = require('../../panels/event/UpdateValueComponentEvent');
+const {DisableComponentEvent} = require('../../panels/event/DisableComponentEvent');
 
 class XbmcBackendPanels extends BaseBackendPanelHandler {
 
@@ -34,9 +35,14 @@ class XbmcBackendPanels extends BaseBackendPanelHandler {
     let volumePanel = new Panel('volumePanel');
     volumePanel
       .addRow([
-        new Slider('Application.SetVolume', 'Vol', 'volume_mute', 0, 100, 5).addEvent(new UpdateValueComponentEvent('volume')),
-        new Switch('Application.SetMute', 'volume_off', 'Mute', true, 'Loud', false)
-      ]);
+        new Slider('Application.SetVolume', 'Vol', 'volume_mute', 0, 100, 5)
+          .addEvent(new UpdateValueComponentEvent('volume'))
+          .addEvent(new DisableComponentEvent('muted', [true]))
+      ,
+      new Switch('Application.SetMute', 'volume_off', 'Mute', true, 'Loud', false)
+        .addEvent(new UpdateValueComponentEvent('muted'))
+  ])
+    ;
     this._addPanel(volumePanel);
 
     let swipePanel = new Panel('swipePanel');
