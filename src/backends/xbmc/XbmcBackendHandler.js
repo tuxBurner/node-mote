@@ -19,17 +19,10 @@ class XbmcBackendHandler extends BaseBackendHandler {
       'Input.OnInputFinished',
       'Player.OnPause',
       'Player.OnPlay',
+      'Player.OnStop',
       'Player.OnPropertyChanged',
       'Player.OnSeek',
       'Player.OnSpeedChanged'];
-
-    /*let kodiRpc = require('node-kodi');
-
-    this.kodiRpc = new kodiRpc({
-      url: this.settings.config.host,
-      user: this.settings.config.user,
-      password: this.settings.config.pass
-    });*/
 
     this.kodi = require('kodi-ws');
 
@@ -56,6 +49,9 @@ class XbmcBackendHandler extends BaseBackendHandler {
   }
 
 
+  /**
+   * Gets the current state from kodi and sends it to the frontend
+   */
   getState() {
 
     let batch = this.connection.batch();
@@ -63,21 +59,44 @@ class XbmcBackendHandler extends BaseBackendHandler {
     let applicationProps = batch.Application.GetProperties({properties: ['muted', 'volume']});
     let guiProps = batch.GUI.GetProperties({properties: ['currentcontrol', 'currentwindow', 'fullscreen']});
     let activPlayers = batch.Player.GetActivePlayers();
+    let playerProps = batch.Player.GetProperties({
+      playerid: 0,
+      properties: ['time', 'totaltime', 'percentage', 'type']
+    });
+    let playerCurrentItem = batch.Player.GetItem({playerid: 0});
 
 
     // TODO:  PVR.GetChannels
-
     batch.send();
 
-    Promise.all([applicationProps, guiProps, activPlayers])
-      .then(function(data) {
-        console.error(data);
-      });
+    const instance = this;
 
-    /*this.connection.run('Application.GetProperties', {properties: ['muted', 'volume']})
+    Promise.all([applicationProps, guiProps, activPlayers, playerProps, playerCurrentItem])
       .then(function(data) {
-        console.error(data);
-      });*/
+
+
+        let currentState = {
+          volume: data[0].volume,
+          muted: data[0].muted,
+          currentWindow: data[1].currentwindow,
+          currentControl: data[1].currentcontrol,
+          fullScreen: data[1].fullscreen
+        };
+
+        if(data[2].length != 0) {
+          currentState.playerType = data[2][0].type;
+          currentState.playerInfo = data[3];
+          currentState.playerItem = data[4];
+        } else {
+          currentState.playerType = 'none';
+          currentState.playerInfo = 'none';
+          currentState.playerItem = 'none'
+        }
+
+        instance.logDebug('Got Info from backend: ', currentState);
+
+        instance.emitBackendState(currentState);
+      });
   }
 
 

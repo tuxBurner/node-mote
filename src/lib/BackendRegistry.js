@@ -25,7 +25,7 @@ class BackendRegistry extends BaseClass {
    * This is called when the user connects to the webserver
    */
   getAllBackends() {
-    var result = {};
+    let result = {};
     for(let idx in this.backends) {
       result[idx] = this.backends[idx].getType();
     }

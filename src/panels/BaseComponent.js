@@ -4,11 +4,31 @@
 class BaseComponent {
 
   constructor(type) {
+
+    /**
+     * Type of the component
+     */
     this.type = type;
+
+    /**
+     * Events the component reacts ons
+     * @type {Array}
+     */
+    this.events = [];
   }
 
   getType() {
     return this.type;
+  }
+
+  /**
+   * Adds an event to the component
+   * @param  eventToAdd the event to add
+   * @return {BaseComponent} the component itself
+   */
+  addEvent(eventToAdd) {
+    this.events.push(eventToAdd);
+    return this;
   }
 }
 

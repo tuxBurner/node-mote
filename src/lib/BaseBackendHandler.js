@@ -11,6 +11,8 @@ class BaseBackendHandler extends BaseClass {
     this.backendName = backendName;
     this.settings = settings;
 
+    this.eventHandler = require('./EventHandler');
+
     this.panelsHandler = require(baseDir + "/BackendPanels.js");
   }
 
@@ -30,6 +32,14 @@ class BaseBackendHandler extends BaseClass {
     }
 
     return panelToReturn;
+  }
+
+  /**
+   * Emits the backend state as an event in the application.
+   * @param stateData
+   */
+  emitBackendState(stateData) {
+    this.eventHandler.emitBackenDataChanged(this.backendName,stateData);
   }
 
 

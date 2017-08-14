@@ -12,6 +12,8 @@ class Webserver extends BaseClass {
     this.http = require('http').Server(this.expApp);
     this.socketIo = require('socket.io')(this.http);
 
+    this.eventHandler = require('./EventHandler');
+
     this.backendRegistry = require('./BackendRegistry');
 
     const instance = this;
@@ -22,6 +24,10 @@ class Webserver extends BaseClass {
     // start the web server
     this.http.listen(this.settings.WEBSERVER_PORT, function() {
       instance.logInfo('listens on *:' + instance.settings.WEBSERVER_PORT);
+    });
+
+    this.eventHandler.registerOnBackendDataChange(function(data) {
+      instance.sendBackendState(data);
     });
   }
 
@@ -42,11 +48,6 @@ class Webserver extends BaseClass {
     this.expApp.use('/', express.static(__dirname + '/../web'));
     this.expApp.use('/materialize', express.static('./node_modules/materialize-css/dist'));
 
-    /*this.expApp.use('/templates', express.static(__dirname+'/html/templates'));
-    this.expApp.use('/jquery', express.static('./node_modules/jquery/dist'));
-    this.expApp.use('/block-ui', express.static('./node_modules/block-ui'));
-    this.expApp.use('/bootstrap', express.static('./node_modules/bootstrap/dist'));
-    this.expApp.use('/assets', express.static(__dirname + '/assets'));*/
   }
 
   /**
@@ -59,6 +60,7 @@ class Webserver extends BaseClass {
 
     // a user connected to the websocket
     this.socketIo.on('connection', function(socket) {
+
       instance.logInfo('Websocket: A user connected');
 
       let avaibleBackends = instance.backendRegistry.getAllBackends();
@@ -76,9 +78,9 @@ class Webserver extends BaseClass {
 
 
       // perform an action on the backend
-      socket.on('backendAction',function(msg) {
+      socket.on('backendAction', function(msg) {
         instance.logDebug('User wants to perform an action: ', msg);
-        instance.backendRegistry.performActionOnBackend(msg.backendName,msg.action,msg.payload);
+        instance.backendRegistry.performActionOnBackend(msg.backendName, msg.action, msg.payload);
       });
 
       // Gets the panels for the given stuff
@@ -102,6 +104,16 @@ class Webserver extends BaseClass {
       });
 
     });
+  }
+
+  /**
+   * Sends the state of the backend to the web frontend
+   * @param payload the data to send 
+   */
+  sendBackendState(payload) {
+    this.logDebug("Sending state data for backend: " + payload.backendName, payload.data);
+
+    this.socketIo.emit('backendState', payload);
   }
 
 }

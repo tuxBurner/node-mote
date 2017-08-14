@@ -197,8 +197,6 @@ class GuiPanelsBuilder {
    * @private
    */
   _buildSwipeHtml(backendName, componentCfg) {
-
-    console.error(componentCfg);
     let html = '<div class="swipe blue-grey darken-1" data-backend-name="' + backendName + '" ';
 
     html += 'data-swipeleft-action="' + componentCfg.leftAction.action + '"';
