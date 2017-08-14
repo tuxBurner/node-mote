@@ -24,12 +24,7 @@ class GuiPanelsBuilder {
 
     let parent = $('#panel_content');
     $(parent).empty();
-    console.error(panelCfg.components);
     this._handleComponents(parent, backendName, panelCfg.components, 12);
-
-    //let html = this._handleComponents(backendName, panelCfg.components, 12);
-    //$('#panel_content').html(html);
-    //this._registerEvenetsOnComponents();
   }
 
 
@@ -38,8 +33,7 @@ class GuiPanelsBuilder {
    * @param stateData
    */
   handleBackendState(stateData) {
-    // get all components which match the backend name
-    let backendComponents = $('[data-backend-name="' + stateData.backendName + '"]')
+    $('.backendComponent').trigger('backendStateChanged' + stateData.backendName, stateData.data);
   }
 
 
@@ -52,10 +46,10 @@ class GuiPanelsBuilder {
    * @private
    */
   _handleComponents(parent, backendName, components, col) {
-    for(let idx in components) {
-      let component = components[idx];
-      this._handleComponent(parent, backendName, component, col);
-    }
+    const instance = this;
+    $.each(components, function(idx, component) {
+      instance._handleComponent(parent, backendName, component, col);
+    });
   }
 
   /**
@@ -96,6 +90,13 @@ class GuiPanelsBuilder {
     $(parent).append(componentObj);
   }
 
+  /**
+   * Builds a row and add the sub components to it
+   * @param backendName
+   * @param component
+   * @return {*|jQuery|HTMLElement}
+   * @private
+   */
   _buildRow(backendName, component) {
     let newCol = 12 / component.components.length;
     let html = '<div class="row">';
@@ -108,6 +109,14 @@ class GuiPanelsBuilder {
     return componentObj;
   }
 
+  /**
+   * Builds a panel
+   * @param backendName
+   * @param col
+   * @param component
+   * @return {*|jQuery|HTMLElement}
+   * @private
+   */
   _buildPanel(backendName, col, component) {
     let componentObj = this._buildCol(col);
 
@@ -116,6 +125,13 @@ class GuiPanelsBuilder {
     return componentObj;
   }
 
+  /**
+   * Builds a column div when given the innerComponent is added as a child to it
+   * @param col
+   * @param innerComponent
+   * @return {*|jQuery|HTMLElement}
+   * @private
+   */
   _buildCol(col, innerComponent) {
     let html = '<div class="col s' + col + '">';
     html += '</div>';
@@ -128,18 +144,25 @@ class GuiPanelsBuilder {
     return componentObj;
   }
 
+  /**
+   * Adds general backend data information to the component
+   * @param componentObj
+   * @param componentCfg
+   * @param backendName
+   * @private
+   */
   _addBackendData(componentObj, componentCfg, backendName) {
-    $(componentObj).data('backendName', backendName);
-    if(componentCfg.action !== undefined) {
-      $(componentObj).data('backendAction', componentCfg.action);
-    }
+    $(componentObj)
+      .data('backendName', backendName)
+      .data('componentCfg',componentCfg)
+      .addClass('backendComponent');
   }
 
 
   /**
    *  Builds a simple action button
    * @param componentCfg
-   * @param col
+   * @param backendName
    * @return {*|jQuery|HTMLElement}
    * @private
    */
@@ -156,7 +179,7 @@ class GuiPanelsBuilder {
 
     $(componentObj).on('click', function() {
       let backendName = $(this).data('backendName');
-      let action = $(this).data('backendAction');
+      let action = $(this).data('componentCfg').action;
       let value = $(this).data('value');
 
       instance.websocketHandler.callBackendAction(backendName, action, {val: value});
@@ -181,13 +204,25 @@ class GuiPanelsBuilder {
     this._addBackendData(inputObj, componentCfg, backendName);
 
     const instance = this;
-    $(inputObj).on('change', function() {
+    $(inputObj).on('input', function() {
       let backendName = $(this).data('backendName');
-      let action = $(this).data('backendAction');
+      let action = $(this).data('componentCfg').action;
       let rangeVal = $(this).val();
       instance.websocketHandler.callBackendAction(backendName, action, {val: rangeVal});
     });
 
+    if(componentCfg.events.length !== 0) {
+      $(inputObj).on('backendStateChanged' + backendName, function(e, stateData) {
+        let componentCfg = $(this).data('componentCfg');
+
+        $.each(componentCfg.events,function(idx,compEvent) {
+          if(compEvent.type === 'updateValue') {
+            $(e.target).val(stateData[compEvent.keyToListen]);
+          }
+        });
+
+      });
+    }
 
     $(inputWrapperObj).append(inputObj);
     $(componentObj).append(inputWrapperObj);
@@ -209,7 +244,7 @@ class GuiPanelsBuilder {
 
     let switchWrapperObj = $('<div class="switch"></div>');
 
-    let switchLabelObj = $('<label>' + componentCfg.txt + '</label>')
+    let switchLabelObj = $('<label>' + componentCfg.txt + '</label>');
 
     let inputObj = $('<input type="checkbox" data-off-val="' + componentCfg.firstVal + '" data-on-val="' + componentCfg.secondVal + '" >');
     this._addBackendData(inputObj, componentCfg, backendName);
@@ -221,7 +256,7 @@ class GuiPanelsBuilder {
       let checked = $(this).prop('checked');
       let valToSet = (checked === true) ? $(this).data('onVal') : $(this).data('offVal');
       let backendName = $(this).data('backendName');
-      let action = $(this).data('backendAction');
+      let action = $(this).data('componentCfg').action;
       instance.websocketHandler.callBackendAction(backendName, action, {val: valToSet});
     });
 
@@ -247,20 +282,12 @@ class GuiPanelsBuilder {
     let componentObj = $('<div class="swipe blue-grey darken-1"></div>');
     this._addBackendData(componentObj, componentCfg, backendName);
 
-    $(componentObj)
-      .data('swipeleft', componentCfg.leftAction)
-      .data('swiperight', componentCfg.rightAction)
-      .data('swipedown', componentCfg.downAction)
-      .data('swipeup', componentCfg.upAction)
-      .data('tap',componentCfg.tapAction);
-
-
     const instance = this;
 
     $(componentObj).hammer({recognizers: [[Hammer.Tap], [Hammer.Swipe, {direction: Hammer.DIRECTION_ALL}]]}).bind("swipeleft swiperight swipeup swipedown tap", function(e) {
       let backendName = $(this).data('backendName');
 
-      let actionData = $(this).data(e.type);
+      let actionData = $(this).data('componentCfg')[e.type];
 
       instance.websocketHandler.callBackendAction(backendName, actionData.action, {val: actionData.value});
 

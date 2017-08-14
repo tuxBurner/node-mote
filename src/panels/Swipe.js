@@ -4,35 +4,35 @@ const {SwipeAction} = require('./SwipeAction');
 class Swipe extends BaseComponent {
   constructor() {
     super('swipe');
-    this.leftAction = null;
-    this.rightAction = null;
-    this.upAction = null;
-    this.downAction = null;
-    this.tapAction = null;
+    this.swipeleft = null;
+    this.swiperight = null;
+    this.swipeup = null;
+    this.swipedown = null;
+    this.tap = null;
   }
 
   addUpAction(action, value) {
-    this.upAction = new SwipeAction(action, value);
+    this.swipeup = new SwipeAction(action, value);
     return this;
   }
 
   addDownAction(action, value) {
-    this.downAction = new SwipeAction(action, value);
+    this.swipedown = new SwipeAction(action, value);
     return this;
   }
 
   addLeftAction(action, value) {
-    this.leftAction = new SwipeAction(action, value);
+    this.swipeleft = new SwipeAction(action, value);
     return this;
   }
 
   addRightAction(action, value) {
-    this.rightAction = new SwipeAction(action, value);
+    this.swiperight = new SwipeAction(action, value);
     return this;
   }
 
   addTapAction(action, value) {
-    this.tapAction = new SwipeAction(action, value);
+    this.tap = new SwipeAction(action, value);
     return this;
   }
 }
