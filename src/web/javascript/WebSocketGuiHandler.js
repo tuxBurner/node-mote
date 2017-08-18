@@ -16,7 +16,7 @@ class WebSocketGuiHandler {
     this.socket.on('config', function(msg) {
       instance._buildSideNav(msg);
 
-      instance._getPanels('backend','XBMC_LOCAL');
+      instance._getPanels('backend','FIRETV_BED');
     });
 
     /**

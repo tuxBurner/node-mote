@@ -196,7 +196,7 @@ class GuiPanelsBuilder {
    * @private
    */
   _buildSlider(componentCfg, backendName) {
-    let componentObj = $('<div><i class="material-icons left">' + componentCfg.icon + '</i><label>' + componentCfg.txt + '</label></div>');
+    let componentObj = $('<div><i class="material-icons left">' + componentCfg.icon + '</i><label>' + componentCfg.txt + ': <output id="APIDConKpVal"></output></label></div>');
     let inputWrapperObj = $('<p class="range-field"></p>');
 
 
@@ -208,6 +208,7 @@ class GuiPanelsBuilder {
       let backendName = $(this).data('backendName');
       let action = $(this).data('componentCfg').action;
       let rangeVal = $(this).val();
+      $(APIDConKpVal).val($(this).val());
       instance.websocketHandler.callBackendAction(backendName, action, {val: rangeVal});
     });
 

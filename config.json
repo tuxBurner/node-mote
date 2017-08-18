@@ -10,6 +10,13 @@
         "host": "localhost",
         "port": "9090"
       }
+    },
+    "FIRETV_BED" : {
+      "type": "firetv",
+      "config": {
+        "host": "192.168.0.159",
+        "adbPath": "/usr/bin/adb"
+      }
     }
   },
   "activities": {
