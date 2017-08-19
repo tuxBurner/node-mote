@@ -3,6 +3,7 @@ const {BaseBackendHandler} = require('../../lib/BaseBackendHandler');
 /**
  * Handler for the amazon firetv
  * https://bitbucket.org/webgyver/node-rc6/src/8d220b0e04de2de69e5d1772da60e1857de22d9f/lib/adb-shell.js?at=master&fileviewer=file-view-default
+ * https://github.com/soef/iobroker.firetv/blob/master/firetv.js
  * https://github.com/appium/appium-adb
  */
 class FiretvBackendHandler extends BaseBackendHandler {

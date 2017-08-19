@@ -5,5 +5,5 @@ $(function() {
   const websocketHandler = new WebSocketGuiHandler(panelsBuilder);
 
 
-  $('.button-collapse').sideNav();
+  $('.leftSideNavBtn').sideNav();
 });

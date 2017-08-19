@@ -12,13 +12,14 @@ class FiretvBackendPanels extends BaseBackendPanelHandler {
     let buttonsPanel = new Panel('buttonsPannel');
     buttonsPanel
       .addRow([
-        new ActionButton('Input', 'Back', 'settings_backup_restore', 'KEYCODE_BACK'),
-        new ActionButton('Input', 'Menu', 'menu', 'KEYCODE_MENU')
+        new ActionButton('Input', '', 'settings_backup_restore', 'KEYCODE_BACK'),
+        new ActionButton('Input', '', 'home', 'KEYCODE_HOME'),
+        new ActionButton('Input', '', 'menu', 'KEYCODE_MENU')
       ])
       .addRow([
-        new ActionButton('Input', 'Rewind', 'settings_backup_restore', 'KEYCODE_MEDIA_REWIND'),
-        new ActionButton('Input', 'Rewind', 'settings_backup_restore', 'KEYCODE_MEDIA_PLAY_PAUSE'),
-        new ActionButton('Input', 'Rewind', 'settings_backup_restore', 'KEYCODE_MEDIA_FAST_FORWARD'),
+        new ActionButton('Input', '', 'fast_rewind', 'KEYCODE_MEDIA_REWIND'),
+        new ActionButton('Input', '', 'play_arrow', 'KEYCODE_MEDIA_PLAY_PAUSE'),
+        new ActionButton('Input', '', 'fast_forward', 'KEYCODE_MEDIA_FAST_FORWARD'),
       ]);
 
     this._addPanel(buttonsPanel)

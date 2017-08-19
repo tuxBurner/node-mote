@@ -2,6 +2,11 @@
   "webserver": {
     "port": 3000
   },
+
+  "defaultView" : {
+    "type" : "backend",
+    "id" : "XBMC_LOCAL"
+  },
   
   "devices": {
     "XBMC_LOCAL": {

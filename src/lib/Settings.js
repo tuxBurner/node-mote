@@ -15,6 +15,7 @@ class Settings {
 
     this.devices = userCfg.devices;
     this.activities = userCfg.activities;
+    this.defaultView = userCfg.defaultView;
   }
 }
 

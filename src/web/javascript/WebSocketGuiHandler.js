@@ -13,10 +13,13 @@ class WebSocketGuiHandler {
 
     const instance = this;
 
+    /**
+     * The backend sended the configuration of node mote
+     */
     this.socket.on('config', function(msg) {
-      instance._buildSideNav(msg);
+      instance.panelsBuilder.buildSideNav(msg);
 
-      instance._getPanels('backend','FIRETV_BED');
+      instance.getPanels(msg.defaultView.type, msg.defaultView.id);
     });
 
     /**
@@ -30,25 +33,10 @@ class WebSocketGuiHandler {
      * When we get a new state of a backend
      */
     this.socket.on('backendState', function(data) {
-       instance.panelsBuilder.handleBackendState(data);
+      instance.panelsBuilder.handleBackendState(data);
     });
   }
 
-  /**
-   * Builds the left side navigation
-   * @param data
-   * @private
-   */
-  _buildSideNav(data) {
-    var html = '<li><h6>Backends</h6></li>'
-      + '<li><div class="divider"></div></li>';
-
-    for(let idx in data.backends) {
-      html += '<li><a href="#!">' + idx + '</a></li>';
-    }
-
-    $('#left-slide-nav').html(html);
-  }
 
   /**
    * Emits the backend action event over the websocket
@@ -56,7 +44,7 @@ class WebSocketGuiHandler {
    * @param action the action to perform on the backend
    * @param payload payload for the given action like volume etc...
    */
-  callBackendAction(backendName,action,payload) {
+  callBackendAction(backendName, action, payload) {
     this.socket.emit('backendAction', {
       backendName: backendName,
       action: action,
@@ -69,9 +57,8 @@ class WebSocketGuiHandler {
    * @param type the type to get can be backend or activity
    * @param name the name of the backend or activity
    * @param panelName the name of the panel to get can be undefined
-   * @private
    */
-  _getPanels(type,name,panelName) {
+  getPanels(type, name, panelName) {
     this.socket.emit('getPanels', {
       type: type,
       name: name,

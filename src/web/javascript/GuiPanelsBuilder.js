@@ -12,15 +12,54 @@ class GuiPanelsBuilder {
   }
 
   /**
+   * builds the side navigation on the left side
+   * @param data
+   */
+  buildSideNav(data) {
+    let parent = $('#left-slide-nav');
+    $(parent).empty();
+
+    if(data.backends !== undefined) {
+      $(parent).append('<li><h6>Backends</h6></li><li><div class="divider"></div></li>');
+      this._buildSideNavPoints(parent, 'backend', data.backends);
+    }
+  }
+
+
+  /**
+   * Builds the side nav points of the given type
+   * @param {element} parent
+   * @param {string} type
+   * @param {mixed} navPoints
+   * @private
+   */
+  _buildSideNavPoints(parent, type, navPoints) {
+
+    const instance = this;
+
+    for(let idx in navPoints) {
+
+      let navPoint = $('<a href="#!">' + idx + '</a>');
+      $(navPoint)
+        .data('type', type)
+        .data('id', idx)
+        .on('click', function(e) {
+          let type = $(this).data('type');
+          let name = $(this).data('id');
+          instance.websocketHandler.getPanels(type, name)
+        });
+
+      $(parent).append($('<li></li>').append(navPoint));
+    }
+  }
+
+  /**
    * Builds the new panels from the given panelscfg
    * @param cfg
    */
   buildNewPanels(cfg) {
-
-
     let backendName = cfg.backendName;
     let panelCfg = cfg.panelCfg;
-
 
     let parent = $('#panel_content');
     $(parent).empty();
@@ -272,8 +311,8 @@ class GuiPanelsBuilder {
 
         $.each(componentCfg.events, function(idx, compEvent) {
           if(compEvent.type === 'updateValue') {
-            let checked =  componentCfg.secondVal === stateData[compEvent.keyToListen] ;
-            $(e.target).prop('checked',checked);
+            let checked = componentCfg.secondVal === stateData[compEvent.keyToListen];
+            $(e.target).prop('checked', checked);
           }
         });
 

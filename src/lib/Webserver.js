@@ -65,8 +65,11 @@ class Webserver extends BaseClass {
 
       let avaibleBackends = instance.backendRegistry.getAllBackends();
 
+
+
       let configToSend = {
-        backends: avaibleBackends
+        backends: avaibleBackends,
+        defaultView: instance.settings.defaultView
       };
 
       instance.socketIo.emit('config', configToSend);
