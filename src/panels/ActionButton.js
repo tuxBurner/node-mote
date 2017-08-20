@@ -12,8 +12,8 @@ class ActionButton extends ActionComponent {
    * @param {string} icon the icon the button has
    * @param {string} value the payload value the button sends
    */
-  constructor(action, txt, icon, value) {
-    super('abutton', action, txt, icon);
+  constructor(backendId, action, txt, icon, value) {
+    super(backendId, 'abutton', action, txt, icon);
     this.value = value || '';
   }
 

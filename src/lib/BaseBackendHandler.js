@@ -14,7 +14,9 @@ class BaseBackendHandler extends BaseClass {
     this.eventHandler = require('./EventHandler');
 
     const backendPanelsClassName = this._capitalize(settings.type) + 'BackendPanels';
-    this.panelsHandler = require(baseDir + "/"+backendPanelsClassName);
+
+    const classToLoad = require(baseDir + "/"+backendPanelsClassName);
+    this.panelsHandler =  new classToLoad[backendPanelsClassName](this);
   }
 
   /**

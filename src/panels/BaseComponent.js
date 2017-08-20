@@ -3,12 +3,21 @@
  */
 class BaseComponent {
 
-  constructor(type) {
+  constructor(backendId, type) {
+
+    if(backendId === undefined) {
+      throw new Error('backendId is not set');
+    }
 
     /**
      * Type of the component
      */
     this.type = type;
+
+    /**
+     * The id of the backend this component belongs to
+     */
+    this.backendId = backendId;
 
     /**
      * Events the component reacts ons

@@ -2,12 +2,10 @@
   "webserver": {
     "port": 3000
   },
-
-  "defaultView" : {
-    "type" : "backend",
-    "id" : "XBMC_LOCAL"
+  "defaultView": {
+    "type": "backend",
+    "id": "XBMC_LOCAL"
   },
-  
   "devices": {
     "XBMC_LOCAL": {
       "type": "xbmc",
@@ -16,16 +14,29 @@
         "port": "9090"
       }
     },
-    "FIRETV_BED" : {
+    "FIRETV_BED": {
       "type": "firetv",
       "config": {
         "host": "192.168.0.159",
         "adbPath": "/usr/bin/adb"
       }
-    }
-  },
-  "activities": {
-    "xbmc_music": {
+    },
+    "SAMSUNG_BED": {
+      "type": "lirc",
+      "config": {
+        "remote": "Samsung_BN59-00865A",
+        "buttons": [
+          {
+            "KEY_POWER": "power_settings_new",
+            "KEY_CYCLEWINDOWS": "input"
+          },
+          {
+            "KEY_VOLUMEDOWN": "volume_down",
+            "KEY_VOLUMEUP": "volume_up",
+            "KEY_MUTE": "volume_off"
+          }
+        ]
+      }
     }
   }
 }

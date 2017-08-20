@@ -2,8 +2,11 @@ const {BaseClass} = require('./BaseClass');
 
 class BaseBackendPanelHandler extends BaseClass {
 
-  constructor() {
+  constructor(backend) {
     super();
+
+    this.backend = backend;
+    this.backendId = backend.backendName;
 
     this.panels = {};
     this.defaultPanelName = '';

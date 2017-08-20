@@ -69,7 +69,7 @@ class BackendRegistry extends BaseClass {
     const classToLoad = require(pathToClassFile);
 
 
-    this.backends[backendName] = new classToLoad[backendHandlerClassName](backendName, settings)
+    this.backends[backendName] = new classToLoad[backendHandlerClassName](backendName, settings);
   }
 
   /**

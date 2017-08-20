@@ -9,44 +9,36 @@ const {DisableComponentEvent} = require('../../panels/event/DisableComponentEven
 
 class XbmcBackendPanels extends BaseBackendPanelHandler {
 
-  constructor() {
+  constructor(backend) {
 
-    super();
+    super(backend);
 
-    let defaultButtonsPanel = new Panel('defaultButtonsPanel');
+    let defaultButtonsPanel = new Panel(this.backendId, 'defaultButtonsPanel');
     defaultButtonsPanel
       .addRow([
-        new ActionButton('Input.ExecuteAction', 'Info', 'info', 'info'),
-        new ActionButton('Input.ExecuteAction', 'Up', 'arrow_upward', 'up'),
-        new ActionButton('Input.ExecuteAction', 'Back', 'settings_backup_restore', 'back')
-      ])
-      .addRow([
-        new ActionButton('Input.ExecuteAction', 'Left', 'arrow_back', 'left'),
-        new ActionButton('Input.ExecuteAction', 'Select', 'center_focus_strong', 'select'),
-        new ActionButton('Input.ExecuteAction', 'Right', 'arrow_forward', 'right')
-      ])
-      .addRow([
-        new ActionButton('Input.Home', 'Home', 'home'),
-        new ActionButton('Input.ExecuteAction', 'Down', 'arrow_downward', 'down'),
-        new ActionButton('Input.ExecuteAction', 'Menu', 'menu', 'menu')
+        new ActionButton(this.backendId, 'Input.Home', 'Home', 'home'),
+        new ActionButton(this.backendId, 'Input.ExecuteAction', 'Info', 'info', 'info'),
+        new ActionButton(this.backendId, 'Input.ExecuteAction', 'Menu', 'menu', 'menu'),
+        new ActionButton(this.backendId, 'Input.ExecuteAction', 'Back', 'settings_backup_restore', 'back')
       ]);
+
     this._addPanel(defaultButtonsPanel);
 
-    let volumePanel = new Panel('volumePanel');
+    let volumePanel = new Panel(this.backendId, 'volumePanel');
     volumePanel
       .addRow([
-        new Slider('Application.SetVolume', 'Vol', 'volume_mute', 0, 100, 5)
+        new Slider(this.backendId, 'Application.SetVolume', 'Vol', 'volume_mute', 0, 100, 5)
           .addEvent(new UpdateValueComponentEvent('volume'))
           .addEvent(new DisableComponentEvent('muted', [true]))
-      ,
-      new Switch('Application.SetMute', 'volume_off', 'Mute', true, 'Loud', false)
-        .addEvent(new UpdateValueComponentEvent('muted'))
-  ])
+        ,
+        new Switch(this.backendId, 'Application.SetMute', 'volume_off', 'Mute', true, 'Loud', false)
+          .addEvent(new UpdateValueComponentEvent('muted'))
+      ])
     ;
     this._addPanel(volumePanel);
 
-    let swipePanel = new Panel('swipePanel');
-    let swipeInput = new Swipe();
+    let swipePanel = new Panel(this.backendId, 'swipePanel');
+    let swipeInput = new Swipe(this.backendId);
     swipeInput
       .addLeftAction('Input.ExecuteAction', 'left')
       .addRightAction('Input.ExecuteAction', 'right')
@@ -59,7 +51,7 @@ class XbmcBackendPanels extends BaseBackendPanelHandler {
     this._addPanel(swipePanel);
 
 
-    let defaultPanel = new Panel('defaultsPanel');
+    let defaultPanel = new Panel(this.backendId, 'defaultsPanel');
     defaultPanel
       .addRow([defaultButtonsPanel])
       .addRow([swipePanel])
@@ -72,4 +64,5 @@ class XbmcBackendPanels extends BaseBackendPanelHandler {
 
 }
 
-module.exports = new XbmcBackendPanels();
+
+exports.XbmcBackendPanels = XbmcBackendPanels;

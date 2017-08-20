@@ -6,8 +6,8 @@ const {Row} = require('./Row');
  */
 class Panel extends BaseComponent {
 
-  constructor(name) {
-    super('panel');
+  constructor(backendId, name) {
+    super(backendId, 'panel');
     this.name = name;
     this.components = [];
   }
@@ -18,7 +18,7 @@ class Panel extends BaseComponent {
   }
 
   addRow(rowComponents) {
-    let row = new Row();
+    let row = new Row(this.backendId);
     row.addComponents(rowComponents);
     this.add(row);
     return this;

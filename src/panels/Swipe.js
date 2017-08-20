@@ -2,8 +2,8 @@ const {BaseComponent} = require('./BaseComponent');
 const {SwipeAction} = require('./SwipeAction');
 
 class Swipe extends BaseComponent {
-  constructor() {
-    super('swipe');
+  constructor(backendId) {
+    super(backendId, 'swipe');
     this.swipeleft = null;
     this.swiperight = null;
     this.swipeup = null;

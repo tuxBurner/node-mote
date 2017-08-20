@@ -58,12 +58,11 @@ class GuiPanelsBuilder {
    * @param cfg
    */
   buildNewPanels(cfg) {
-    let backendName = cfg.backendName;
     let panelCfg = cfg.panelCfg;
 
     let parent = $('#panel_content');
     $(parent).empty();
-    this._handleComponents(parent, backendName, panelCfg.components, 12);
+    this._handleComponents(parent, panelCfg.components, 12);
   }
 
 
@@ -79,49 +78,47 @@ class GuiPanelsBuilder {
   /**
    * Handles the components of a sub component
    * @param parent
-   * @param backendName
    * @param components
    * @param col
    * @private
    */
-  _handleComponents(parent, backendName, components, col) {
+  _handleComponents(parent, components, col) {
     const instance = this;
     $.each(components, function(idx, component) {
-      instance._handleComponent(parent, backendName, component, col);
+      instance._handleComponent(parent, component, col);
     });
   }
 
   /**
    * Handles a single gui component
    * @param parent
-   * @param backendName
    * @param component
    * @param col
    * @private
    */
-  _handleComponent(parent, backendName, component, col) {
+  _handleComponent(parent, component, col) {
 
     // the generated component dom obj
     let componentObj = null;
 
     switch(component.type) {
       case 'row' :
-        componentObj = this._buildRow(backendName, component);
+        componentObj = this._buildRow(component);
         break;
       case 'panel' :
-        componentObj = this._buildPanel(backendName, col, component);
+        componentObj = this._buildPanel(col, component);
         break;
       case 'abutton' :
-        componentObj = this._buildCol(col, this._buildActionBtn(component, backendName));
+        componentObj = this._buildCol(col, this._buildActionBtn(component));
         break;
       case 'slider' :
-        componentObj = this._buildCol(col, this._buildSlider(component, backendName));
+        componentObj = this._buildCol(col, this._buildSlider(component));
         break;
       case 'switch' :
-        componentObj = this._buildCol(col, this._buildSwitch(component, backendName));
+        componentObj = this._buildCol(col, this._buildSwitch(component));
         break;
       case 'swipe' :
-        componentObj = this._buildCol(col, this._buildSwipe(component, backendName));
+        componentObj = this._buildCol(col, this._buildSwipe(component));
         break;
     }
 
@@ -131,35 +128,33 @@ class GuiPanelsBuilder {
 
   /**
    * Builds a row and add the sub components to it
-   * @param backendName
    * @param component
    * @return {*|jQuery|HTMLElement}
    * @private
    */
-  _buildRow(backendName, component) {
+  _buildRow(component) {
     let newCol = 12 / component.components.length;
     let html = '<div class="row">';
     html += '</div>';
     let componentObj = $(html);
 
     // add the sub component objects to the gui
-    this._handleComponents(componentObj, backendName, component.components, newCol);
+    this._handleComponents(componentObj, component.components, newCol);
 
     return componentObj;
   }
 
   /**
    * Builds a panel
-   * @param backendName
    * @param col
    * @param component
    * @return {*|jQuery|HTMLElement}
    * @private
    */
-  _buildPanel(backendName, col, component) {
+  _buildPanel(col, component) {
     let componentObj = this._buildCol(col);
 
-    this._handleComponents(componentObj, backendName, component.components, col);
+    this._handleComponents(componentObj, component.components, col);
 
     return componentObj;
   }
@@ -187,12 +182,11 @@ class GuiPanelsBuilder {
    * Adds general backend data information to the component
    * @param componentObj
    * @param componentCfg
-   * @param backendName
    * @private
    */
-  _addBackendData(componentObj, componentCfg, backendName) {
+  _addBackendData(componentObj, componentCfg) {
     $(componentObj)
-      .data('backendName', backendName)
+      .data('backendName', componentCfg.backendId)
       .data('componentCfg', componentCfg)
       .addClass('backendComponent');
   }
@@ -201,18 +195,17 @@ class GuiPanelsBuilder {
   /**
    *  Builds a simple action button
    * @param componentCfg
-   * @param backendName
    * @return {*|jQuery|HTMLElement}
    * @private
    */
-  _buildActionBtn(componentCfg, backendName) {
+  _buildActionBtn(componentCfg) {
 
     let html = '<a class="waves-effect waves-light btn-large"><i class="material-icons left">' + componentCfg.icon + '</i>' + componentCfg.txt + '</a>';
 
     let componentObj = $(html);
 
     $(componentObj).data('value', componentCfg.value);
-    this._addBackendData(componentObj, componentCfg, backendName);
+    this._addBackendData(componentObj, componentCfg);
 
     const instance = this;
 
@@ -230,17 +223,16 @@ class GuiPanelsBuilder {
   /**
    * Builds a slider
    * @param componentCfg
-   * @param backendName
    * @return {*|jQuery|HTMLElement}
    * @private
    */
-  _buildSlider(componentCfg, backendName) {
+  _buildSlider(componentCfg) {
     let componentObj = $('<div><i class="material-icons left">' + componentCfg.icon + '</i><label>' + componentCfg.txt + ': <output id="APIDConKpVal"></output></label></div>');
     let inputWrapperObj = $('<p class="range-field"></p>');
 
 
     let inputObj = $('<input type="range" min="' + componentCfg.min + '" max="' + componentCfg.max + '" step="' + componentCfg.step + '"/>');
-    this._addBackendData(inputObj, componentCfg, backendName);
+    this._addBackendData(inputObj, componentCfg);
 
     const instance = this;
     $(inputObj).on('input', function() {
@@ -252,7 +244,7 @@ class GuiPanelsBuilder {
     });
 
     if(componentCfg.events.length !== 0) {
-      $(inputObj).on('backendStateChanged' + backendName, function(e, stateData) {
+      $(inputObj).on('backendStateChanged' + componentCfg.backendId, function(e, stateData) {
         let componentCfg = $(this).data('componentCfg');
 
         $.each(componentCfg.events, function(idx, compEvent) {
@@ -280,11 +272,10 @@ class GuiPanelsBuilder {
    * Builds a switch
    *
    * @param componentCfg
-   * @param backendName
    * @return {*|jQuery|HTMLElement}
    * @private
    */
-  _buildSwitch(componentCfg, backendName) {
+  _buildSwitch(componentCfg) {
 
     let componentObj = $('<div><i class="material-icons left">' + componentCfg.icon + '</i></div>');
 
@@ -293,7 +284,7 @@ class GuiPanelsBuilder {
     let switchLabelObj = $('<label>' + componentCfg.txt + '</label>');
 
     let inputObj = $('<input type="checkbox" data-off-val="' + componentCfg.firstVal + '" data-on-val="' + componentCfg.secondVal + '" >');
-    this._addBackendData(inputObj, componentCfg, backendName);
+    this._addBackendData(inputObj, componentCfg);
 
     const instance = this;
     $(inputObj).on('change', function() {
@@ -306,7 +297,7 @@ class GuiPanelsBuilder {
     });
 
     if(componentCfg.events.length !== 0) {
-      $(inputObj).on('backendStateChanged' + backendName, function(e, stateData) {
+      $(inputObj).on('backendStateChanged' + componentCfg.backendId, function(e, stateData) {
         let componentCfg = $(this).data('componentCfg');
 
         $.each(componentCfg.events, function(idx, compEvent) {
@@ -331,21 +322,22 @@ class GuiPanelsBuilder {
   /**
    * Builds a swipe input
    * @param componentCfg
-   * @param backendName
    * @return {*|jQuery|HTMLElement}
    * @private
    */
-  _buildSwipe(componentCfg, backendName) {
+  _buildSwipe(componentCfg) {
 
 
     let componentObj = $('<div class="swipe blue-grey darken-1"></div>');
-    this._addBackendData(componentObj, componentCfg, backendName);
+    this._addBackendData(componentObj, componentCfg);
 
     const instance = this;
 
     $(componentObj).hammer({recognizers: [[Hammer.Tap], [Hammer.Swipe, {direction: Hammer.DIRECTION_ALL}]]}).bind("swipeleft swiperight swipeup swipedown tap", function(e) {
-      let backendName = $(this).data('backendName');
 
+      navigator.vibrate(100);
+
+      let backendName = $(this).data('backendName');
       let actionData = $(this).data('componentCfg')[e.type];
 
       instance.websocketHandler.callBackendAction(backendName, actionData.action, {val: actionData.value});

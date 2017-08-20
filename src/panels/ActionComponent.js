@@ -5,8 +5,8 @@ const {BaseComponent} = require('./BaseComponent');
  */
 class ActionComponent extends BaseComponent {
 
-  constructor(type, action, txt, icon) {
-    super(type);
+  constructor(backendId, type, action, txt, icon) {
+    super(backendId,type);
     this.action = action;
     this.txt = txt;
     this.icon = icon;

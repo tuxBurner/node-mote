@@ -3,7 +3,7 @@ const {BaseComponent} = require('./BaseComponent');
 class Row extends BaseComponent {
 
   constructor() {
-    super('row');
+    super('none','row');
     this.components = [];
   }
 
