@@ -19,7 +19,7 @@ class GuiPanelsBuilder {
     let parent = $('#left-slide-nav');
     $(parent).empty();
 
-    if(data.backends !== undefined) {
+    if (data.backends !== undefined) {
       $(parent).append('<li><h6>Backends</h6></li><li><div class="divider"></div></li>');
       this._buildSideNavPoints(parent, 'backend', data.backends);
     }
@@ -37,13 +37,13 @@ class GuiPanelsBuilder {
 
     const instance = this;
 
-    for(let idx in navPoints) {
+    for (let idx in navPoints) {
 
       let navPoint = $('<a href="#!">' + idx + '</a>');
       $(navPoint)
         .data('type', type)
         .data('id', idx)
-        .on('click', function(e) {
+        .on('click', function (e) {
           let type = $(this).data('type');
           let name = $(this).data('id');
           instance.websocketHandler.getPanels(type, name)
@@ -63,6 +63,9 @@ class GuiPanelsBuilder {
     let parent = $('#panel_content');
     $(parent).empty();
     this._handleComponents(parent, panelCfg.components, 12);
+
+    // selects are handled special in materialize
+    $('select').material_select();
   }
 
 
@@ -84,7 +87,7 @@ class GuiPanelsBuilder {
    */
   _handleComponents(parent, components, col) {
     const instance = this;
-    $.each(components, function(idx, component) {
+    $.each(components, function (idx, component) {
       instance._handleComponent(parent, component, col);
     });
   }
@@ -101,7 +104,7 @@ class GuiPanelsBuilder {
     // the generated component dom obj
     let componentObj = null;
 
-    switch(component.type) {
+    switch (component.type) {
       case 'row' :
         componentObj = this._buildRow(component);
         break;
@@ -119,6 +122,9 @@ class GuiPanelsBuilder {
         break;
       case 'swipe' :
         componentObj = this._buildCol(col, this._buildSwipe(component));
+        break;
+      case 'select' :
+        componentObj = this._buildCol(col, this._buildSelect(component));
         break;
     }
 
@@ -171,7 +177,7 @@ class GuiPanelsBuilder {
     html += '</div>';
     let componentObj = $(html);
 
-    if(innerComponent !== undefined) {
+    if (innerComponent !== undefined) {
       $(componentObj).append(innerComponent);
     }
 
@@ -186,7 +192,6 @@ class GuiPanelsBuilder {
    */
   _addBackendData(componentObj, componentCfg) {
     $(componentObj)
-      .data('backendName', componentCfg.backendId)
       .data('componentCfg', componentCfg)
       .addClass('backendComponent');
   }
@@ -203,16 +208,15 @@ class GuiPanelsBuilder {
     let html = '<a class="waves-effect waves-light btn-large"><i class="material-icons left">' + componentCfg.icon + '</i>' + componentCfg.txt + '</a>';
 
     let componentObj = $(html);
-
-    $(componentObj).data('value', componentCfg.value);
+    
     this._addBackendData(componentObj, componentCfg);
 
     const instance = this;
 
-    $(componentObj).on('click', function() {
-      let backendName = $(this).data('backendName');
+    $(componentObj).on('click', function () {
+      let backendName = $(this).data('componentCfg').backendId;
       let action = $(this).data('componentCfg').action;
-      let value = $(this).data('value');
+      let value = $(this).data('componentCfg').value;
 
       instance.websocketHandler.callBackendAction(backendName, action, {val: value});
     });
@@ -235,24 +239,24 @@ class GuiPanelsBuilder {
     this._addBackendData(inputObj, componentCfg);
 
     const instance = this;
-    $(inputObj).on('input', function() {
-      let backendName = $(this).data('backendName');
+    $(inputObj).on('input', function () {
+      let backendName = $(this).data('componentCfg').backendId;
       let action = $(this).data('componentCfg').action;
       let rangeVal = $(this).val();
       $(APIDConKpVal).val($(this).val());
       instance.websocketHandler.callBackendAction(backendName, action, {val: rangeVal});
     });
 
-    if(componentCfg.events.length !== 0) {
-      $(inputObj).on('backendStateChanged' + componentCfg.backendId, function(e, stateData) {
+    if (componentCfg.events.length !== 0) {
+      $(inputObj).on('backendStateChanged' + componentCfg.backendId, function (e, stateData) {
         let componentCfg = $(this).data('componentCfg');
 
-        $.each(componentCfg.events, function(idx, compEvent) {
-          if(compEvent.type === 'updateValue') {
+        $.each(componentCfg.events, function (idx, compEvent) {
+          if (compEvent.type === 'updateValue') {
             $(e.target).val(stateData[compEvent.keyToListen]);
           }
 
-          if(compEvent.type === 'disableOn') {
+          if (compEvent.type === 'disableOn') {
             let currentBackendState = stateData[compEvent.keyToListen];
             let disable = ($.inArray(currentBackendState, compEvent.valuesToDisableOn) !== -1);
             $(e.target).prop("disabled", disable);
@@ -287,21 +291,21 @@ class GuiPanelsBuilder {
     this._addBackendData(inputObj, componentCfg);
 
     const instance = this;
-    $(inputObj).on('change', function() {
+    $(inputObj).on('change', function () {
       let checked = $(this).prop('checked');
       let componentCfg = $(this).data('componentCfg');
       let valToSet = (checked === true) ? componentCfg.secondVal : componentCfg.firstVal;
-      let backendName = $(this).data('backendName');
+      let backendName = $(this).data('componentCfg').backendId;
       let action = componentCfg.action;
       instance.websocketHandler.callBackendAction(backendName, action, {val: valToSet});
     });
 
-    if(componentCfg.events.length !== 0) {
-      $(inputObj).on('backendStateChanged' + componentCfg.backendId, function(e, stateData) {
+    if (componentCfg.events.length !== 0) {
+      $(inputObj).on('backendStateChanged' + componentCfg.backendId, function (e, stateData) {
         let componentCfg = $(this).data('componentCfg');
 
-        $.each(componentCfg.events, function(idx, compEvent) {
-          if(compEvent.type === 'updateValue') {
+        $.each(componentCfg.events, function (idx, compEvent) {
+          if (compEvent.type === 'updateValue') {
             let checked = componentCfg.secondVal === stateData[compEvent.keyToListen];
             $(e.target).prop('checked', checked);
           }
@@ -320,6 +324,44 @@ class GuiPanelsBuilder {
   }
 
   /**
+   * Builds a select input
+   * @param componentCfg
+   * @return {*|jQuery|HTMLElement}
+   * @private
+   */
+  _buildSelect(componentCfg) {
+
+
+    let returnObj = $('<div class="input-field"></div>');
+
+    let componentObj = $('<select></select>');
+    this._addBackendData(componentObj,componentCfg);
+
+    for (let idx in componentCfg.values) {
+      $(componentObj).append('<option value="' + componentCfg.values[idx] + '">' + componentCfg.values[idx] + '</option>');
+    }
+
+    const instance = this;
+
+    // TODO: this is the same as button
+    $(componentObj).on('change', function () {
+      let backendName = $(this).data('componentCfg').backendId;
+      let action = $(this).data('componentCfg').action;
+      let value = $(this).val();
+
+      instance.websocketHandler.callBackendAction(backendName, action, {val: value});
+    });
+
+    $(returnObj).append(componentObj);
+
+    let labelObj = $('<label>' + componentCfg.txt + '</label>');
+    $(returnObj).append(labelObj);
+
+
+    return returnObj;
+  }
+
+  /**
    * Builds a swipe input
    * @param componentCfg
    * @return {*|jQuery|HTMLElement}
@@ -333,11 +375,11 @@ class GuiPanelsBuilder {
 
     const instance = this;
 
-    $(componentObj).hammer({recognizers: [[Hammer.Tap], [Hammer.Swipe, {direction: Hammer.DIRECTION_ALL}]]}).bind("swipeleft swiperight swipeup swipedown tap", function(e) {
+    $(componentObj).hammer({recognizers: [[Hammer.Tap], [Hammer.Swipe, {direction: Hammer.DIRECTION_ALL}]]}).bind("swipeleft swiperight swipeup swipedown tap", function (e) {
 
       navigator.vibrate(100);
 
-      let backendName = $(this).data('backendName');
+      let backendName = $(this).data('componentCfg').backendId;
       let actionData = $(this).data('componentCfg')[e.type];
 
       instance.websocketHandler.callBackendAction(backendName, actionData.action, {val: actionData.value});

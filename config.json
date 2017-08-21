@@ -4,7 +4,7 @@
   },
   "defaultView": {
     "type": "backend",
-    "id": "XBMC_LOCAL"
+    "id": "DENON"
   },
   "devices": {
     "XBMC_LOCAL": {
@@ -21,21 +21,13 @@
         "adbPath": "/usr/bin/adb"
       }
     },
-    "SAMSUNG_BED": {
-      "type": "lirc",
-      "config": {
-        "remote": "Samsung_BN59-00865A",
-        "buttons": [
-          {
-            "KEY_POWER": "power_settings_new",
-            "KEY_CYCLEWINDOWS": "input"
-          },
-          {
-            "KEY_VOLUMEDOWN": "volume_down",
-            "KEY_VOLUMEUP": "volume_up",
-            "KEY_MUTE": "volume_off"
-          }
-        ]
+    "DENON" : {
+      "type" : "denon",
+      "config" : {
+        "host" : "192.168.0.88",
+        "maxVol" : 60,
+        "inputs" : ["DVD","MPLAY", "BD", "SAT", "GAME"],
+        "surroundModes" : ["DIRECT", "MCH STEREO"]
       }
     }
   }
