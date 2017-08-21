@@ -21,17 +21,13 @@ class DenonBackendPanels extends BaseBackendPanelHandler {
      * Panel for selecting the inputs
      */
     let inputPanel = new Panel(this.backendId,'inputPanel');
-    inputPanel.addRow([
-      new Select(this.backendId,'SETINPUT','','Input',this.backend.settings.config.inputs)
-    ]);
+    inputPanel.add(new Select(this.backendId,'SETINPUT','','Input',this.backend.settings.config.inputs));
 
     /**
      * Panel for selecting the inputs
      */
     let surroundPanel = new Panel(this.backendId,'surroundPanel');
-    inputPanel.addRow([
-      new Select(this.backendId,'SETSURROUND','','Sound Mode:',this.backend.settings.config.surroundModes)
-    ]);
+    inputPanel.add(new Select(this.backendId,'SETSURROUND','','Sound Mode:',this.backend.settings.config.surroundModes));
 
 
     /**
