@@ -5,5 +5,9 @@ $(function() {
   const websocketHandler = new WebSocketGuiHandler(panelsBuilder);
 
 
+  // register the modals
+  $('.modal').modal();
+
+
   $('.leftSideNavBtn').sideNav();
 });

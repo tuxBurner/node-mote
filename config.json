@@ -30,5 +30,33 @@
         "surroundModes" : ["DIRECT", "MCH STEREO"]
       }
     }
+  },
+  "activities" : {
+    "FIRETV" : {
+      "devices" : [
+        "SAMSUNG","DENON", "FIRETV_BED"
+      ],
+      "panels" : [
+        ["FIRETV_BED.defaultsPanel"],
+        ["DENON.volumePanel"]
+      ],
+      "states" :
+        {
+          "DENON"  : {
+            "power" : "ON",
+            "input" : "SAT"
+          },
+          "SAMSUNG" : {
+            "power" : {
+              "button" : "ASD",
+              "question" : "Is the tv on ?"
+            },
+            "input" : {
+              "button" : "ASD",
+              "question" : "Is the correct Input selected ?"
+            }
+          }
+        }
+    }
   }
 }

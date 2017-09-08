@@ -1,5 +1,9 @@
 # Lirc Infrared backend
 
+## Configure Lirc
+
+Check if you can find your remote here: http://lirc.sourceforge.net/remotes/
+
 ## Add a remote
 
 ### config.json

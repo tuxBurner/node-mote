@@ -10,6 +10,7 @@ class NodeMote extends BaseClass {
     this.logInfo('Starting System');
 
     this.backendRegistry = require('./BackendRegistry');
+    this.activitiesRegistry = require('./ActivitiesRegistry');
     this.webServer = require('./Webserver');
 
 
