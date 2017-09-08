@@ -66,4 +66,14 @@ class WebSocketGuiHandler {
     });
   }
 
+  /**
+   * Calls the backend to get the states for the given backendIds
+   * @param backendIds
+   */
+  getStates(backendIds) {
+    this.socket.emit('getStates', {
+      backendIds : backendIds
+    });
+  }
+
 }

@@ -5,6 +5,9 @@ const {Slider} = require('../../panels/Slider');
 const {Select} = require('../../panels/Select');
 const {Switch} = require('../../panels/Switch');
 
+const {UpdateValueComponentEvent} = require('../../panels/event/UpdateValueComponentEvent');
+const {DisableComponentEvent} = require('../../panels/event/DisableComponentEvent');
+
 class DenonBackendPanels extends BaseBackendPanelHandler {
 
   constructor(backend) {
@@ -36,8 +39,11 @@ class DenonBackendPanels extends BaseBackendPanelHandler {
     let volumePanel = new Panel(this.backendId, 'volumePanel');
     volumePanel
       .addRow([
-        new Slider(this.backendId, 'SETVOLUME', 'Vol', 'volume_mute', 0, this.backend.settings.config.maxVol, 2),
+        new Slider(this.backendId, 'SETVOLUME', 'Vol', 'volume_mute', 0, this.backend.settings.config.maxVol, 2)
+          .addEvent(new UpdateValueComponentEvent('volume'))
+          .addEvent(new DisableComponentEvent('mute', ['ON'])),
         new Switch(this.backendId, 'SETMUTE', 'volume_off', 'Mute', 'ON', 'Loud', 'OFF')
+          .addEvent(new UpdateValueComponentEvent('mute'))
       ])
     ;
     this._addPanel(volumePanel);

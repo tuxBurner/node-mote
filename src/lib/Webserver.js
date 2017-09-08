@@ -22,11 +22,11 @@ class Webserver extends BaseClass {
     this._declareExpressUses(express);
 
     // start the web server
-    this.http.listen(this.settings.WEBSERVER_PORT, function() {
+    this.http.listen(this.settings.WEBSERVER_PORT, function () {
       instance.logInfo('listens on *:' + instance.settings.WEBSERVER_PORT);
     });
 
-    this.eventHandler.registerOnBackendDataChange(function(data) {
+    this.eventHandler.registerOnBackendDataChange(function (data) {
       instance.sendBackendState(data);
     });
   }
@@ -59,12 +59,11 @@ class Webserver extends BaseClass {
     const instance = this;
 
     // a user connected to the websocket
-    this.socketIo.on('connection', function(socket) {
+    this.socketIo.on('connection', function (socket) {
 
       instance.logInfo('Websocket: A user connected');
 
       let avaibleBackends = instance.backendRegistry.getAllBackends();
-
 
 
       let configToSend = {
@@ -75,34 +74,46 @@ class Webserver extends BaseClass {
       instance.socketIo.emit('config', configToSend);
 
       // user disconnected
-      socket.on('disconnect', function() {
+      socket.on('disconnect', function () {
         instance.logInfo('Websocket: A user disconnected');
       });
 
 
       // perform an action on the backend
-      socket.on('backendAction', function(msg) {
+      socket.on('backendAction', function (msg) {
         instance.logDebug('User wants to perform an action: ', msg);
         instance.backendRegistry.performActionOnBackend(msg.backendName, msg.action, msg.payload);
       });
 
       // Gets the panels for the given stuff
-      socket.on('getPanels', function(msg) {
+      socket.on('getPanels', function (msg) {
         instance.logDebug('User wants panels cfg: ', msg);
 
         var panelsCfg = undefined;
 
         // get the panels for the given backend
-        if(msg.type === 'backend') {
+        if (msg.type === 'backend') {
           panelsCfg = instance.backendRegistry.getPanelsForBackend(msg.name, msg.panelName);
+          panelsCfg.backendIds = [msg.name];
         }
 
         //instance.logDebug('Found panels cfg: ', panelsCfg);
         socket.emit('panels', panelsCfg);
       });
 
+
+      /**
+       * Get the states for the given backends
+       */
+      socket.on('getStates', function (msg) {
+        instance.logDebug('User wants backend states: ', msg);
+        for (let idx in msg.backendIds) {
+          instance.backendRegistry.getStateForBackend(msg.backendIds[idx]);
+        }
+      });
+
       // a backend message arrived we have to tell the backend to do something :)
-      socket.on('backendMessage', function(msg) {
+      socket.on('backendMessage', function (msg) {
         instance.logDebug('backendMessage received: ', msg);
       });
 
@@ -111,7 +122,7 @@ class Webserver extends BaseClass {
 
   /**
    * Sends the state of the backend to the web frontend
-   * @param payload the data to send 
+   * @param payload the data to send
    */
   sendBackendState(payload) {
     this.logDebug('Sending state data for backend: ' + payload.backendName, payload.data);

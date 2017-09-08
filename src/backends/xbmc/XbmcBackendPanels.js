@@ -4,6 +4,7 @@ const {ActionButton} = require('../../panels/ActionButton');
 const {Slider} = require('../../panels/Slider');
 const {Switch} = require('../../panels/Switch');
 const {Swipe} = require('../../panels/Swipe');
+
 const {UpdateValueComponentEvent} = require('../../panels/event/UpdateValueComponentEvent');
 const {DisableComponentEvent} = require('../../panels/event/DisableComponentEvent');
 

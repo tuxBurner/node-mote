@@ -66,6 +66,9 @@ class GuiPanelsBuilder {
 
     // selects are handled special in materialize
     $('select').material_select();
+
+    // gather the backend ids to get the states
+    this.websocketHandler.getStates(cfg.backendIds);
   }
 
 

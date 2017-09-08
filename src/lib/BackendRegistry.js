@@ -35,11 +35,19 @@ class BackendRegistry extends BaseClass {
 
   /**
    * Gets the given panel from the given backend
-   * @param backendName
+   * @param backendId
    * @param panelToGet
    */
-  getPanelsForBackend(backendName, panelToGet) {
-    return this.backends[backendName].getPanelByName(panelToGet);
+  getPanelsForBackend(backendId, panelToGet) {
+    return this.backends[backendId].getPanelByName(panelToGet);
+  }
+
+  /**
+   * Triggers get the state for the given backendId
+   * @param backendId
+   */
+  getStateForBackend(backendId) {
+    this.backends[backendId].getState();
   }
 
   /**

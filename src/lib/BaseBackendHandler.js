@@ -30,6 +30,13 @@ class BaseBackendHandler extends BaseClass {
   }
 
   /**
+   * Override this to get the state of the backend
+   */
+  getState() {
+
+  }
+
+  /**
    * Gets the panel with the given name
    * @param {string} panelName the name of the panel
    */
