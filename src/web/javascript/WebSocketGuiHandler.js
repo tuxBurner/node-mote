@@ -45,6 +45,9 @@ class WebSocketGuiHandler {
    * @param payload payload for the given action like volume etc...
    */
   callBackendAction(backendName, action, payload) {
+
+    navigator.vibrate(100);
+
     this.socket.emit('backendAction', {
       backendName: backendName,
       action: action,

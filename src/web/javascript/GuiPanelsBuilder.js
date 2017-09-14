@@ -300,6 +300,7 @@ class GuiPanelsBuilder {
 
     const instance = this;
     $(inputObj).on('change', function () {
+
       let checked = $(this).prop('checked');
       let componentCfg = $(this).data('componentCfg');
       let valToSet = (checked === true) ? componentCfg.secondVal : componentCfg.firstVal;
@@ -384,8 +385,6 @@ class GuiPanelsBuilder {
     const instance = this;
 
     $(componentObj).hammer({recognizers: [[Hammer.Tap], [Hammer.Swipe, {direction: Hammer.DIRECTION_ALL}]]}).bind("swipeleft swiperight swipeup swipedown tap", function (e) {
-
-      navigator.vibrate(100);
 
       let backendName = $(this).data('componentCfg').backendId;
       let actionData = $(this).data('componentCfg')[e.type];
