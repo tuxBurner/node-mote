@@ -23,7 +23,7 @@ class EventHandler extends  BaseClass {
     });
   }
 
-  emitBackenDataChanged(backendName, stateData) {
+  emitBackendDataChanged(backendName, stateData) {
 
     let payLoad = {
       backendName: backendName,

@@ -25,13 +25,29 @@ class ActivitiesRegistry extends BaseClass {
   /**
    * This is called when the user connects to the webserver
    */
-  getAllBackends() {
+  getAllActivities() {
     let result = {};
-    for(let idx in this.backends) {
-      result[idx] = this.backends[idx].getType();
+    for(let idx in this.activities) {
+      result[idx] = 'activity';
     }
-
+    
     return result;
+  }
+
+  /**
+   * Gets al panels for the given activity
+   */
+  getPanelsForActivity(activityId) {
+
+    this.logDebug("User wants panels for activity: ",activityId);
+    let activity = this.activities[activityId];
+
+    let panelToReturn = {
+      backendIds: activity.devices,
+      panelCfg: activity.panel
+    };
+
+    return panelToReturn;
   }
 
 

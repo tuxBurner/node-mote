@@ -27,7 +27,7 @@ class BackendRegistry extends BaseClass {
   getAllBackends() {
     let result = {};
     for(let idx in this.backends) {
-      result[idx] = this.backends[idx].getType();
+      result[idx] = 'backend';
     }
 
     return result;

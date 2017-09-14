@@ -15,6 +15,7 @@ class Webserver extends BaseClass {
     this.eventHandler = require('./EventHandler');
 
     this.backendRegistry = require('./BackendRegistry');
+    this.activityRegistry = require('./ActivitiesRegistry');
 
     const instance = this;
 
@@ -64,12 +65,16 @@ class Webserver extends BaseClass {
       instance.logInfo('Websocket: A user connected');
 
       let avaibleBackends = instance.backendRegistry.getAllBackends();
+      let avaibleActivities = instance.activityRegistry.getAllActivities()
 
 
       let configToSend = {
         backends: avaibleBackends,
+        activities: avaibleActivities,
         defaultView: instance.settings.defaultView
       };
+
+      instance.logDebug("Sending config data to user: ",configToSend);
 
       instance.socketIo.emit('config', configToSend);
 
@@ -95,6 +100,10 @@ class Webserver extends BaseClass {
         if (msg.type === 'backend') {
           panelsCfg = instance.backendRegistry.getPanelsForBackend(msg.name, msg.panelName);
           panelsCfg.backendIds = [msg.name];
+        }
+
+        if (msg.type === 'activity') {
+          panelsCfg = instance.activityRegistry.getPanelsForActivity(msg.name);
         }
 
         //instance.logDebug('Found panels cfg: ', panelsCfg);

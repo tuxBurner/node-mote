@@ -3,8 +3,8 @@
     "port": 3000
   },
   "defaultView": {
-    "type": "backend",
-    "id": "DENON"
+    "type": "activity",
+    "id": "FIRETV"
   },
   "devices": {
     "XBMC_LOCAL": {
@@ -33,9 +33,6 @@
   },
   "activities" : {
     "FIRETV" : {
-      "devices" : [
-        "SAMSUNG","DENON", "FIRETV_BED"
-      ],
       "panels" : [
         ["FIRETV_BED.defaultsPanel"],
         ["DENON.volumePanel"]

@@ -47,9 +47,8 @@ class BaseBackendHandler extends BaseClass {
     }
 
     let panelToReturn = {
-      backendName: this.backendName,
       panelCfg: this.panelsHandler.getPanelForFrontend(panelName)
-    }
+    };
 
     return panelToReturn;
   }
@@ -59,7 +58,7 @@ class BaseBackendHandler extends BaseClass {
    * @param stateData
    */
   emitBackendState(stateData) {
-    this.eventHandler.emitBackenDataChanged(this.backendName,stateData);
+    this.eventHandler.emitBackendDataChanged(this.backendName,stateData);
   }
 
 

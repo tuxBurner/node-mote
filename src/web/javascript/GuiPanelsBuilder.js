@@ -18,6 +18,11 @@ class GuiPanelsBuilder {
   buildSideNav(data) {
     let parent = $('#left-slide-nav');
     $(parent).empty();
+    
+    if (data.activities !== undefined) {
+      $(parent).append('<li><h6>Activities</h6></li><li><div class="divider"></div></li>');
+      this._buildSideNavPoints(parent, 'activity', data.activities);
+    }
 
     if (data.backends !== undefined) {
       $(parent).append('<li><h6>Backends</h6></li><li><div class="divider"></div></li>');
