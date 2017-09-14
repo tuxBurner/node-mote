@@ -51,6 +51,7 @@ class GuiPanelsBuilder {
         .on('click', function (e) {
           let type = $(this).data('type');
           let name = $(this).data('id');
+          $('.leftSideNavBtn').sideNav('hide');
           instance.websocketHandler.getPanels(type, name)
         });
 
@@ -63,6 +64,10 @@ class GuiPanelsBuilder {
    * @param cfg
    */
   buildNewPanels(cfg) {
+
+    // display the name of the current state
+    $('#currentStateNameDisplay').text(cfg.id);
+
     let panelCfg = cfg.panelCfg;
 
     let parent = $('#panel_content');

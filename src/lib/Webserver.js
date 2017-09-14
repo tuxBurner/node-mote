@@ -106,6 +106,9 @@ class Webserver extends BaseClass {
           panelsCfg = instance.activityRegistry.getPanelsForActivity(msg.name);
         }
 
+        panelsCfg.type = msg.type;
+        panelsCfg.id = msg.name;
+
         //instance.logDebug('Found panels cfg: ', panelsCfg);
         socket.emit('panels', panelsCfg);
       });
