@@ -18,13 +18,13 @@ class GuiPanelsBuilder {
   buildSideNav(data) {
     let parent = $('#left-slide-nav');
     $(parent).empty();
-    
-    if (data.activities !== undefined) {
+
+    if(data.activities !== undefined) {
       $(parent).append('<li><h6>Activities</h6></li><li><div class="divider"></div></li>');
       this._buildSideNavPoints(parent, 'activity', data.activities);
     }
 
-    if (data.backends !== undefined) {
+    if(data.backends !== undefined) {
       $(parent).append('<li><h6>Backends</h6></li><li><div class="divider"></div></li>');
       this._buildSideNavPoints(parent, 'backend', data.backends);
     }
@@ -42,13 +42,13 @@ class GuiPanelsBuilder {
 
     const instance = this;
 
-    for (let idx in navPoints) {
+    for(let idx in navPoints) {
 
-      let navPoint = $('<a href="#!">' + idx + '</a>');
+      let navPoint = $('<a class="nmNavPoint" href="#!">' + idx + '</a>');
       $(navPoint)
         .data('type', type)
         .data('id', idx)
-        .on('click', function (e) {
+        .on('click', function(e) {
           let type = $(this).data('type');
           let name = $(this).data('id');
           $('.leftSideNavBtn').sideNav('hide');
@@ -60,13 +60,23 @@ class GuiPanelsBuilder {
   }
 
   /**
-   * Builds the new panels from the given panelscfg
+   * Builds the new panels from the given panels cfg
+   * and set some other meta data in the gui about the currently selected
+   * state.
    * @param cfg
    */
-  buildNewPanels(cfg) {
+  showNewState(cfg) {
 
     // display the name of the current state
     $('#currentStateNameDisplay').text(cfg.id);
+
+    // mark the state as active in the menu
+    $('.nmNavPoint').parent().removeClass('active');
+    $('.nmNavPoint').each(function(idx,obj) {
+      if($(obj).data('type') === cfg.type && $(obj).data('id') === cfg.id) {
+         $(obj).parent().addClass('active');
+      }
+    });
 
     let panelCfg = cfg.panelCfg;
 
@@ -100,7 +110,7 @@ class GuiPanelsBuilder {
    */
   _handleComponents(parent, components, col) {
     const instance = this;
-    $.each(components, function (idx, component) {
+    $.each(components, function(idx, component) {
       instance._handleComponent(parent, component, col);
     });
   }
@@ -117,7 +127,7 @@ class GuiPanelsBuilder {
     // the generated component dom obj
     let componentObj = null;
 
-    switch (component.type) {
+    switch(component.type) {
       case 'row' :
         componentObj = this._buildRow(component);
         break;
@@ -186,11 +196,11 @@ class GuiPanelsBuilder {
    * @private
    */
   _buildCol(col, innerComponent) {
-    let html = '<div class="col s' + col + '">';
+    let html = '<div class="col center-align s' + col + '">';
     html += '</div>';
     let componentObj = $(html);
 
-    if (innerComponent !== undefined) {
+    if(innerComponent !== undefined) {
       $(componentObj).append(innerComponent);
     }
 
@@ -218,15 +228,15 @@ class GuiPanelsBuilder {
    */
   _buildActionBtn(componentCfg) {
 
-    let html = '<a class="waves-effect waves-light btn-large"><i class="material-icons left">' + componentCfg.icon + '</i>' + componentCfg.txt + '</a>';
+    let html = '<a class="waves-effect waves-light btn"><i class="material-icons left">' + componentCfg.icon + '</i>' + componentCfg.txt + '</a>';
 
     let componentObj = $(html);
-    
+
     this._addBackendData(componentObj, componentCfg);
 
     const instance = this;
 
-    $(componentObj).on('click', function () {
+    $(componentObj).on('click', function() {
       let backendName = $(this).data('componentCfg').backendId;
       let action = $(this).data('componentCfg').action;
       let value = $(this).data('componentCfg').value;
@@ -252,7 +262,7 @@ class GuiPanelsBuilder {
     this._addBackendData(inputObj, componentCfg);
 
     const instance = this;
-    $(inputObj).on('input', function () {
+    $(inputObj).on('input', function() {
       let backendName = $(this).data('componentCfg').backendId;
       let action = $(this).data('componentCfg').action;
       let rangeVal = $(this).val();
@@ -260,16 +270,16 @@ class GuiPanelsBuilder {
       instance.websocketHandler.callBackendAction(backendName, action, {val: rangeVal});
     });
 
-    if (componentCfg.events.length !== 0) {
-      $(inputObj).on('backendStateChanged' + componentCfg.backendId, function (e, stateData) {
+    if(componentCfg.events.length !== 0) {
+      $(inputObj).on('backendStateChanged' + componentCfg.backendId, function(e, stateData) {
         let componentCfg = $(this).data('componentCfg');
 
-        $.each(componentCfg.events, function (idx, compEvent) {
-          if (compEvent.type === 'updateValue') {
+        $.each(componentCfg.events, function(idx, compEvent) {
+          if(compEvent.type === 'updateValue') {
             $(e.target).val(stateData[compEvent.keyToListen]);
           }
 
-          if (compEvent.type === 'disableOn') {
+          if(compEvent.type === 'disableOn') {
             let currentBackendState = stateData[compEvent.keyToListen];
             let disable = ($.inArray(currentBackendState, compEvent.valuesToDisableOn) !== -1);
             $(e.target).prop("disabled", disable);
@@ -304,7 +314,7 @@ class GuiPanelsBuilder {
     this._addBackendData(inputObj, componentCfg);
 
     const instance = this;
-    $(inputObj).on('change', function () {
+    $(inputObj).on('change', function() {
 
       let checked = $(this).prop('checked');
       let componentCfg = $(this).data('componentCfg');
@@ -314,12 +324,12 @@ class GuiPanelsBuilder {
       instance.websocketHandler.callBackendAction(backendName, action, {val: valToSet});
     });
 
-    if (componentCfg.events.length !== 0) {
-      $(inputObj).on('backendStateChanged' + componentCfg.backendId, function (e, stateData) {
+    if(componentCfg.events.length !== 0) {
+      $(inputObj).on('backendStateChanged' + componentCfg.backendId, function(e, stateData) {
         let componentCfg = $(this).data('componentCfg');
 
-        $.each(componentCfg.events, function (idx, compEvent) {
-          if (compEvent.type === 'updateValue') {
+        $.each(componentCfg.events, function(idx, compEvent) {
+          if(compEvent.type === 'updateValue') {
             let checked = componentCfg.secondVal === stateData[compEvent.keyToListen];
             $(e.target).prop('checked', checked);
           }
@@ -349,16 +359,16 @@ class GuiPanelsBuilder {
     let returnObj = $('<div class="input-field"></div>');
 
     let componentObj = $('<select></select>');
-    this._addBackendData(componentObj,componentCfg);
+    this._addBackendData(componentObj, componentCfg);
 
-    for (let idx in componentCfg.values) {
+    for(let idx in componentCfg.values) {
       $(componentObj).append('<option value="' + componentCfg.values[idx] + '">' + componentCfg.values[idx] + '</option>');
     }
 
     const instance = this;
 
     // TODO: this is the same as button
-    $(componentObj).on('change', function () {
+    $(componentObj).on('change', function() {
       let backendName = $(this).data('componentCfg').backendId;
       let action = $(this).data('componentCfg').action;
       let value = $(this).val();
@@ -389,7 +399,7 @@ class GuiPanelsBuilder {
 
     const instance = this;
 
-    $(componentObj).hammer({recognizers: [[Hammer.Tap], [Hammer.Swipe, {direction: Hammer.DIRECTION_ALL}]]}).bind("swipeleft swiperight swipeup swipedown tap", function (e) {
+    $(componentObj).hammer({recognizers: [[Hammer.Tap], [Hammer.Swipe, {direction: Hammer.DIRECTION_ALL}]]}).bind("swipeleft swiperight swipeup swipedown tap", function(e) {
 
       let backendName = $(this).data('componentCfg').backendId;
       let actionData = $(this).data('componentCfg')[e.type];

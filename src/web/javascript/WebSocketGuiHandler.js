@@ -26,7 +26,7 @@ class WebSocketGuiHandler {
      * When we got some new panels redraw the panels
      */
     this.socket.on('panels', function(msg) {
-      instance.panelsBuilder.buildNewPanels(msg);
+      instance.panelsBuilder.showNewState(msg);
     });
 
     /**

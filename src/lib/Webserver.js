@@ -92,25 +92,9 @@ class Webserver extends BaseClass {
 
       // Gets the panels for the given stuff
       socket.on('getPanels', function (msg) {
-        instance.logDebug('User wants panels cfg: ', msg);
-
-        var panelsCfg = undefined;
-
-        // get the panels for the given backend
-        if (msg.type === 'backend') {
-          panelsCfg = instance.backendRegistry.getPanelsForBackend(msg.name, msg.panelName);
-          panelsCfg.backendIds = [msg.name];
-        }
-
-        if (msg.type === 'activity') {
-          panelsCfg = instance.activityRegistry.getPanelsForActivity(msg.name);
-        }
-
-        panelsCfg.type = msg.type;
-        panelsCfg.id = msg.name;
-
+        let panels = instance._getFrontendPanels(msg);
         //instance.logDebug('Found panels cfg: ', panelsCfg);
-        socket.emit('panels', panelsCfg);
+        socket.emit('panels', panels);
       });
 
 
@@ -130,6 +114,33 @@ class Webserver extends BaseClass {
       });
 
     });
+  }
+
+  /**
+   * Gets the panels for the given type and id
+   * @param msg the message from the frontend containing the id and the type
+   * @return {undefined}
+   * @private
+   */
+  _getFrontendPanels(msg) {
+    this.logDebug('User wants panels cfg: ', msg);
+
+    var panelsCfg = undefined;
+
+    // get the panels for the given backend
+    if (msg.type === 'backend') {
+      panelsCfg = this.backendRegistry.getPanelsForBackend(msg.name, msg.panelName);
+      panelsCfg.backendIds = [msg.name];
+    }
+
+    if (msg.type === 'activity') {
+      panelsCfg = this.activityRegistry.getPanelsForActivity(msg.name);
+    }
+
+    panelsCfg.type = msg.type;
+    panelsCfg.id = msg.name;
+
+    return panelsCfg;
   }
 
   /**
