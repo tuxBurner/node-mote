@@ -89,6 +89,11 @@ class GuiPanelsBuilder {
 
     // gather the backend ids to get the states
     this.websocketHandler.getStates(cfg.backendIds);
+
+
+
+
+      this._handleActivityStates(cfg);
   }
 
 
@@ -411,6 +416,27 @@ class GuiPanelsBuilder {
 
 
     return componentObj;
+  }
+
+  /**
+   * This handles the state to set on the backends
+   * @param cfg
+   * @private
+   */
+  _handleActivityStates(cfg) {
+
+    // empty the list
+    $('#activitySetStatesList').empty();
+
+    if(cfg.type === 'activity') {
+      $(cfg.states).each(function(backendId,state){
+         console.error(state);
+      });
+    }
+
+    $('#activityQuerstionModal').modal('open');
+
+
   }
 
 }

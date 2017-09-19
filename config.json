@@ -39,20 +39,24 @@
       ],
       "states" :
         {
-          "DENON"  : {
-            "power" : "ON",
-            "input" : "SAT"
-          },
-          "SAMSUNG" : {
-            "power" : {
-              "button" : "ASD",
-              "question" : "Is the tv on ?"
-            },
-            "input" : {
-              "button" : "ASD",
-              "question" : "Is the correct Input selected ?"
+          "DENON"  :
+            [
+              {
+                "action" : "POWER"
+              },
+              {
+                "action" : "SETINPUT",
+                "payload" : "SAT"
+              }
+            ]
+          ,
+          "SAMSUNG" :
+          [
+            {
+              "action" : "Power",
+              "question" :  "Is the Tv turned on ?"
             }
-          }
+          ]
         }
     }
   }

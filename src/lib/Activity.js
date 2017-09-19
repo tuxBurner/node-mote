@@ -1,7 +1,6 @@
 const {BaseClass} = require('./BaseClass');
 
 const {Panel} = require('../panels/Panel');
-const {Row} = require('../panels/Row');
 
 /**
  * This class represents an activity where multiple backends are configured
@@ -19,6 +18,7 @@ class Activity extends BaseClass {
     // main panel of the activity
     this.panel = new Panel('none','none');
     this.devices = [];
+    this.states  = activitySettings.states;
 
     this._buildPanels(activitySettings);
   }

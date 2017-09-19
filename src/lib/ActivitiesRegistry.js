@@ -44,11 +44,13 @@ class ActivitiesRegistry extends BaseClass {
 
     let panelToReturn = {
       backendIds: activity.devices,
-      panelCfg: activity.panel
+      panelCfg: activity.panel,
+      states: activity.states
     };
 
     return panelToReturn;
   }
+
 
 
 
