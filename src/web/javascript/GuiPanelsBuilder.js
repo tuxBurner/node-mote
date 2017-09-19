@@ -140,7 +140,9 @@ class GuiPanelsBuilder {
         componentObj = this._buildPanel(col, component);
         break;
       case 'abutton' :
-        componentObj = this._buildCol(col, this._buildActionBtn(component));
+        let guiButton = new  GuiActionButton(component,col,this.websocketHandler);
+        guiButton.buildHtmlComponent();
+        componentObj = guiButton.getComponent();//this._buildCol(col, this._buildActionBtn(component));
         break;
       case 'slider' :
         componentObj = this._buildCol(col, this._buildSlider(component));
@@ -149,7 +151,9 @@ class GuiPanelsBuilder {
         componentObj = this._buildCol(col, this._buildSwitch(component));
         break;
       case 'swipe' :
-        componentObj = this._buildCol(col, this._buildSwipe(component));
+        let swipe = new GuiSwipeComponent(component,col,this.websocketHandler);
+        swipe.buildHtmlComponent()
+        componentObj = swipe.getComponent();
         break;
       case 'select' :
         componentObj = this._buildCol(col, this._buildSelect(component));
