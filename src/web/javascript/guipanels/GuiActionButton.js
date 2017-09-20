@@ -8,9 +8,9 @@ class GuiActionButton extends GuiColumnComponent {
     const instance = this;
 
     $(componentObj).on('click', function() {
-      let backendName = $(this).data('componentCfg').backendId;
-      let action = $(this).data('componentCfg').action;
-      let value = $(this).data('componentCfg').value;
+      let backendName = instance.cfg.backendId;
+      let action = instance.cfg.action;
+      let value = instance.cfg.value;
 
       instance.websocketHandler.callBackendAction(backendName, action, {val: value});
     });

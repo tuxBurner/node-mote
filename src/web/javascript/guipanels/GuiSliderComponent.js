@@ -9,10 +9,11 @@ class GuiSliderComponent extends GuiColumnComponent {
 
     const instance = this;
     $(inputObj).on('input', function() {
-      let backendName = $(this).data('componentCfg').backendId;
-      let action = $(this).data('componentCfg').action;
+      let backendName = instance.cfg.backendId;
+      let action = instance.cfg.action;
       let rangeVal = $(this).val();
-      //$(APIDConKpVal).val($(this).val());
+      // TODO FIX THIS
+      $('#APIDConKpVal').val($(this).val());
       instance.websocketHandler.callBackendAction(backendName, action, {val: rangeVal});
     });
 

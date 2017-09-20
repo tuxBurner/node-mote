@@ -7,8 +7,8 @@ class GuiSwipeComponent extends GuiColumnComponent {
 
     $(componentObj).hammer({recognizers: [[Hammer.Tap], [Hammer.Swipe, {direction: Hammer.DIRECTION_ALL}]]}).bind("swipeleft swiperight swipeup swipedown tap", function(e) {
 
-      let backendName = $(this).data('componentCfg').backendId;
-      let actionData = $(this).data('componentCfg')[e.type];
+      let backendName = instance.cfg.backendId;
+      let actionData = instance.cfg[e.type];
 
       instance.websocketHandler.callBackendAction(backendName, actionData.action, {val: actionData.value});
 

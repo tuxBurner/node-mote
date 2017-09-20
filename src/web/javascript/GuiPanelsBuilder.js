@@ -145,7 +145,11 @@ class GuiPanelsBuilder {
         componentObj = guiButton.getComponent();//this._buildCol(col, this._buildActionBtn(component));
         break;
       case 'slider' :
-        componentObj = this._buildCol(col, this._buildSlider(component));
+        //componentObj = this._buildCol(col, this._buildSlider(component));
+        let guiSlider = new  GuiSliderComponent(component,col,this.websocketHandler);
+        guiSlider.buildHtmlComponent();
+        componentObj = guiSlider.getComponent();
+
         break;
       case 'switch' :
         componentObj = this._buildCol(col, this._buildSwitch(component));
@@ -229,32 +233,7 @@ class GuiPanelsBuilder {
   }
 
 
-  /**
-   *  Builds a simple action button
-   * @param componentCfg
-   * @return {*|jQuery|HTMLElement}
-   * @private
-   */
-  _buildActionBtn(componentCfg) {
 
-    let html = '<a class="waves-effect waves-light btn"><i class="material-icons left">' + componentCfg.icon + '</i>' + componentCfg.txt + '</a>';
-
-    let componentObj = $(html);
-
-    this._addBackendData(componentObj, componentCfg);
-
-    const instance = this;
-
-    $(componentObj).on('click', function() {
-      let backendName = $(this).data('componentCfg').backendId;
-      let action = $(this).data('componentCfg').action;
-      let value = $(this).data('componentCfg').value;
-
-      instance.websocketHandler.callBackendAction(backendName, action, {val: value});
-    });
-
-    return componentObj;
-  }
 
   /**
    * Builds a slider

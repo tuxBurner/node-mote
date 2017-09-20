@@ -45,12 +45,11 @@ class GuiBaseComponent {
    */
   _addBackendData() {
 
-    if(this.component === null || $(this.component).data('componentCfg') !== null) {
+    if(this.component === null) {
       return;
     }
 
     $(this.component)
-      .data('componentCfg', this.cfg)
       .addClass('backendComponent');
   }
 

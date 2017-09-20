@@ -2,54 +2,54 @@
 <html>
 <head>
 
-  <title>Node Mote</title>
+    <title>Node Mote</title>
 
-  <!--Import Google Icon Font-->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <!--Import materialize.css-->
-  <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css" media="screen,projection"/>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css" media="screen,projection"/>
 
-  <link type="text/css" rel="stylesheet" href="main.css" media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="main.css" media="screen,projection"/>
 
-  <!--Let browser know website is optimized for mobile-->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 
 <body>
 <nav class="nav-extended">
-  <div class="nav-wrapper">
-    <a class="brand-logo center" id="currentStateNameDisplay"></a>
-    <a class="leftSideNavBtn" href="#" data-activates="left-slide-nav"><i class="material-icons">menu</i></a>
-  </div>
+    <div class="nav-wrapper">
+        <a class="brand-logo center" id="currentStateNameDisplay"></a>
+        <a class="leftSideNavBtn" href="#" data-activates="left-slide-nav"><i class="material-icons">menu</i></a>
+    </div>
 </nav>
 
 
 <div class="container">
 
-  <ul id="left-slide-nav" class="side-nav">
-    <!-- Content is filled via WebSocketGuiHandler._buildSideNav -->
-  </ul>
+    <ul id="left-slide-nav" class="side-nav">
+        <!-- Content is filled via WebSocketGuiHandler._buildSideNav -->
+    </ul>
 
 
-  <div id="panel_content">
-    <!-- Content is filled via GuiPanelsBuilder.buildNewPanels -->
-  </div>
-
-  <!-- FOOTER MODAL -->
-  <!-- Modal Structure -->
-  <div id="activityQuerstionModal" class="modal bottom-sheet">
-    <div class="modal-content">
-      <h4>All devices ready ?</h4>
-
-      <div class="collection" id="activitySetStatesList">
-        
-      </div>
+    <div id="panel_content">
+        <!-- Content is filled via GuiPanelsBuilder.buildNewPanels -->
     </div>
-    <div class="modal-footer">
-      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+
+    <!-- FOOTER MODAL -->
+    <!-- Modal Structure -->
+    <div id="activityQuerstionModal" class="modal bottom-sheet">
+        <div class="modal-content">
+            <h4>All devices ready ?</h4>
+
+            <div class="collection" id="activitySetStatesList">
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+        </div>
     </div>
-  </div>
-  <!-- EO FOOTER MODAL -->
+    <!-- EO FOOTER MODAL -->
 
 
 </div>
@@ -66,6 +66,7 @@
 <script type="text/javascript" src="javascript/guipanels/GuiColumnComponent.js"></script>
 <script type="text/javascript" src="javascript/guipanels/GuiActionButton.js"></script>
 <script type="text/javascript" src="javascript/guipanels/GuiSwipeComponent.js"></script>
+<script type="text/javascript" src="javascript/guipanels/GuiSliderComponent.js"></script>
 
 <script type="text/javascript" src="javascript/GuiPanelsBuilder.js"></script>
 <script type="text/javascript" src="http://hammerjs.github.io/dist/hammer.min.js"></script>
