@@ -160,7 +160,9 @@ class GuiPanelsBuilder {
         componentObj = swipe.getComponent();
         break;
       case 'select' :
-        componentObj = this._buildCol(col, this._buildSelect(component));
+        let guiSelect = new GuiSelectComponent(component, col, this.websocketHandler);
+        guiSelect.buildHtmlComponent();
+        componentObj = guiSelect.getComponent();
         break;
     }
 
@@ -230,45 +232,6 @@ class GuiPanelsBuilder {
     $(componentObj)
       .data('componentCfg', componentCfg)
       .addClass('backendComponent');
-  }
-
-
-  /**
-   * Builds a select input
-   * @param componentCfg
-   * @return {*|jQuery|HTMLElement}
-   * @private
-   */
-  _buildSelect(componentCfg) {
-
-
-    let returnObj = $('<div class="input-field"></div>');
-
-    let componentObj = $('<select></select>');
-    this._addBackendData(componentObj, componentCfg);
-
-    for(let idx in componentCfg.values) {
-      $(componentObj).append('<option value="' + componentCfg.values[idx] + '">' + componentCfg.values[idx] + '</option>');
-    }
-
-    const instance = this;
-
-    // TODO: this is the same as button
-    $(componentObj).on('change', function() {
-      let backendName = $(this).data('componentCfg').backendId;
-      let action = $(this).data('componentCfg').action;
-      let value = $(this).val();
-
-      instance.websocketHandler.callBackendAction(backendName, action, {val: value});
-    });
-
-    $(returnObj).append(componentObj);
-
-    let labelObj = $('<label>' + componentCfg.txt + '</label>');
-    $(returnObj).append(labelObj);
-
-
-    return returnObj;
   }
 
 
