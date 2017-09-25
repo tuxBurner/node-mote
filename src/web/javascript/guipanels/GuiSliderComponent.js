@@ -7,6 +7,7 @@ class GuiSliderComponent extends GuiColumnComponent {
 
     let inputObj = $('<input type="range" min="' + this.cfg.min + '" max="' + this.cfg.max + '" step="' + this.cfg.step + '"/>');
 
+    // handle change value event on the slider
     const instance = this;
     $(inputObj).on('input', function() {
       let backendName = instance.cfg.backendId;
@@ -19,6 +20,16 @@ class GuiSliderComponent extends GuiColumnComponent {
 
     $(inputWrapperObj).append(inputObj);
     $(componentObj).append(inputWrapperObj);
+
+    // the input obj is the main component for events here
+    this.eventComponent = inputObj;
+
     return componentObj;
+  }
+
+  _handleUpdateValueEvent(cfgEventObj, stateData) {
+    super._handleUpdateValueEvent(cfgEventObj, stateData);
+    let valToDisplay = stateData[cfgEventObj.keyToListen];
+    $('#APIDConKpVal').val(valToDisplay);
   }
 }

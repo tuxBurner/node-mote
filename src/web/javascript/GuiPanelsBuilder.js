@@ -72,9 +72,9 @@ class GuiPanelsBuilder {
 
     // mark the state as active in the menu
     $('.nmNavPoint').parent().removeClass('active');
-    $('.nmNavPoint').each(function(idx,obj) {
+    $('.nmNavPoint').each(function(idx, obj) {
       if($(obj).data('type') === cfg.type && $(obj).data('id') === cfg.id) {
-         $(obj).parent().addClass('active');
+        $(obj).parent().addClass('active');
       }
     });
 
@@ -91,9 +91,7 @@ class GuiPanelsBuilder {
     this.websocketHandler.getStates(cfg.backendIds);
 
 
-
-
-      this._handleActivityStates(cfg);
+    this._handleActivityStates(cfg);
   }
 
 
@@ -140,22 +138,24 @@ class GuiPanelsBuilder {
         componentObj = this._buildPanel(col, component);
         break;
       case 'abutton' :
-        let guiButton = new  GuiActionButton(component,col,this.websocketHandler);
+        let guiButton = new GuiActionButton(component, col, this.websocketHandler);
         guiButton.buildHtmlComponent();
         componentObj = guiButton.getComponent();//this._buildCol(col, this._buildActionBtn(component));
         break;
       case 'slider' :
         //componentObj = this._buildCol(col, this._buildSlider(component));
-        let guiSlider = new  GuiSliderComponent(component,col,this.websocketHandler);
+        let guiSlider = new GuiSliderComponent(component, col, this.websocketHandler);
         guiSlider.buildHtmlComponent();
         componentObj = guiSlider.getComponent();
 
         break;
       case 'switch' :
-        componentObj = this._buildCol(col, this._buildSwitch(component));
+        let guiSwitch = new GuiSwitchComponent(component, col, this.websocketHandler);
+        guiSwitch.buildHtmlComponent();
+        componentObj = guiSwitch.getComponent();
         break;
       case 'swipe' :
-        let swipe = new GuiSwipeComponent(component,col,this.websocketHandler);
+        let swipe = new GuiSwipeComponent(component, col, this.websocketHandler);
         swipe.buildHtmlComponent()
         componentObj = swipe.getComponent();
         break;
@@ -233,108 +233,6 @@ class GuiPanelsBuilder {
   }
 
 
-
-
-  /**
-   * Builds a slider
-   * @param componentCfg
-   * @return {*|jQuery|HTMLElement}
-   * @private
-   */
-  _buildSlider(componentCfg) {
-    let componentObj = $('<div><i class="material-icons left">' + componentCfg.icon + '</i><label>' + componentCfg.txt + ': <output id="APIDConKpVal"></output></label></div>');
-    let inputWrapperObj = $('<p class="range-field"></p>');
-
-
-    let inputObj = $('<input type="range" min="' + componentCfg.min + '" max="' + componentCfg.max + '" step="' + componentCfg.step + '"/>');
-    this._addBackendData(inputObj, componentCfg);
-
-    const instance = this;
-    $(inputObj).on('input', function() {
-      let backendName = $(this).data('componentCfg').backendId;
-      let action = $(this).data('componentCfg').action;
-      let rangeVal = $(this).val();
-      $(APIDConKpVal).val($(this).val());
-      instance.websocketHandler.callBackendAction(backendName, action, {val: rangeVal});
-    });
-
-    if(componentCfg.events.length !== 0) {
-      $(inputObj).on('backendStateChanged' + componentCfg.backendId, function(e, stateData) {
-        let componentCfg = $(this).data('componentCfg');
-
-        $.each(componentCfg.events, function(idx, compEvent) {
-          if(compEvent.type === 'updateValue') {
-            $(e.target).val(stateData[compEvent.keyToListen]);
-          }
-
-          if(compEvent.type === 'disableOn') {
-            let currentBackendState = stateData[compEvent.keyToListen];
-            let disable = ($.inArray(currentBackendState, compEvent.valuesToDisableOn) !== -1);
-            $(e.target).prop("disabled", disable);
-          }
-        });
-
-      });
-    }
-
-    $(inputWrapperObj).append(inputObj);
-    $(componentObj).append(inputWrapperObj);
-    return componentObj;
-  }
-
-
-  /**
-   * Builds a switch
-   *
-   * @param componentCfg
-   * @return {*|jQuery|HTMLElement}
-   * @private
-   */
-  _buildSwitch(componentCfg) {
-
-    let componentObj = $('<div><i class="material-icons left">' + componentCfg.icon + '</i></div>');
-
-    let switchWrapperObj = $('<div class="switch"></div>');
-
-    let switchLabelObj = $('<label>' + componentCfg.txt + '</label>');
-
-    let inputObj = $('<input type="checkbox" data-off-val="' + componentCfg.firstVal + '" data-on-val="' + componentCfg.secondVal + '" >');
-    this._addBackendData(inputObj, componentCfg);
-
-    const instance = this;
-    $(inputObj).on('change', function() {
-
-      let checked = $(this).prop('checked');
-      let componentCfg = $(this).data('componentCfg');
-      let valToSet = (checked === true) ? componentCfg.secondVal : componentCfg.firstVal;
-      let backendName = $(this).data('componentCfg').backendId;
-      let action = componentCfg.action;
-      instance.websocketHandler.callBackendAction(backendName, action, {val: valToSet});
-    });
-
-    if(componentCfg.events.length !== 0) {
-      $(inputObj).on('backendStateChanged' + componentCfg.backendId, function(e, stateData) {
-        let componentCfg = $(this).data('componentCfg');
-
-        $.each(componentCfg.events, function(idx, compEvent) {
-          if(compEvent.type === 'updateValue') {
-            let checked = componentCfg.secondVal === stateData[compEvent.keyToListen];
-            $(e.target).prop('checked', checked);
-          }
-        });
-
-      });
-    }
-
-    $(switchLabelObj).append(inputObj);
-    $(switchLabelObj).append('<span class="lever"></span>' + componentCfg.txt2);
-    $(switchWrapperObj).append(switchLabelObj);
-    $(componentObj).append(switchWrapperObj);
-
-
-    return componentObj;
-  }
-
   /**
    * Builds a select input
    * @param componentCfg
@@ -373,33 +271,6 @@ class GuiPanelsBuilder {
     return returnObj;
   }
 
-  /**
-   * Builds a swipe input
-   * @param componentCfg
-   * @return {*|jQuery|HTMLElement}
-   * @private
-   */
-  _buildSwipe(componentCfg) {
-
-
-    let componentObj = $('<div class="swipe blue-grey darken-1"></div>');
-    this._addBackendData(componentObj, componentCfg);
-
-    const instance = this;
-
-    $(componentObj).hammer({recognizers: [[Hammer.Tap], [Hammer.Swipe, {direction: Hammer.DIRECTION_ALL}]]}).bind("swipeleft swiperight swipeup swipedown tap", function(e) {
-
-      let backendName = $(this).data('componentCfg').backendId;
-      let actionData = $(this).data('componentCfg')[e.type];
-
-      instance.websocketHandler.callBackendAction(backendName, actionData.action, {val: actionData.value});
-
-      return true;
-    });
-
-
-    return componentObj;
-  }
 
   /**
    * This handles the state to set on the backends
@@ -412,14 +283,12 @@ class GuiPanelsBuilder {
     $('#activitySetStatesList').empty();
 
     if(cfg.type === 'activity') {
-      $(cfg.states).each(function(backendId,state){
-         console.error(state);
+      $(cfg.states).each(function(backendId, state) {
+        console.error(state);
       });
+
+      $('#activityQuerstionModal').modal('open');
     }
-
-    $('#activityQuerstionModal').modal('open');
-
-
   }
 
 }

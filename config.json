@@ -3,8 +3,8 @@
     "port": 3000
   },
   "defaultView": {
-    "type": "activity",
-    "id": "FIRETV"
+    "type": "backend",
+    "id": "XBMC_LOCAL"
   },
   "devices": {
     "XBMC_LOCAL": {
