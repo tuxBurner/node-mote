@@ -7,16 +7,18 @@ class GuiSelectComponent extends GuiColumnComponent {
 
 
     for(let idx in this.cfg.values) {
-      $(componentObj).append('<option value="' + componentCfg.values[idx] + '">' + componentCfg.values[idx] + '</option>');
+      $(componentObj).append('<option value="' + this.cfg.values[idx] + '">' + this.cfg.values[idx] + '</option>');
     }
 
     const instance = this;
 
+    this.eventComponent = componentObj;
 
     $(componentObj).on('change', function() {
       let value = $(this).val();
-      instance.websocketHandler.callBackendAction(this.cfg.backendId, this.cfg.action, {val: value});
+      instance.websocketHandler.callBackendAction(instance.cfg.backendId, instance.cfg.action, {val: value});
     });
+
 
     $(returnObj).append(componentObj);
 
@@ -25,5 +27,10 @@ class GuiSelectComponent extends GuiColumnComponent {
 
 
     return returnObj;
+  }
+
+  _handleUpdateValueEvent(cfgEventObj, stateData) {
+    super._handleUpdateValueEvent(cfgEventObj, stateData);
+    $(this.eventComponent).material_select();
   }
 }

@@ -4,7 +4,7 @@
   },
   "defaultView": {
     "type": "backend",
-    "id": "XBMC_LOCAL"
+    "id": "DENON"
   },
   "devices": {
     "XBMC_LOCAL": {
@@ -26,7 +26,7 @@
       "config" : {
         "host" : "192.168.0.88",
         "maxVol" : 60,
-        "inputs" : ["DVD","MPLAY", "BD", "SAT", "GAME"],
+        "inputs" : ["DVD","MPLAY", "BD", "SAT/CBL", "GAME"],
         "surroundModes" : ["DIRECT", "MCH STEREO"]
       }
     }

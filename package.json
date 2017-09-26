@@ -9,7 +9,7 @@
   "author": "tuxBurner",
   "license": "ISC",
   "dependencies": {
-    "denon-client": "^0.2.2",
+    "denon-client": "^0.2.3",
     "express": "^4.15.3",
     "kodi-ws": "^2.4.3",
     "lirc-client": "^1.0.0",
