@@ -222,18 +222,6 @@ class GuiPanelsBuilder {
     return componentObj;
   }
 
-  /**
-   * Adds general backend data information to the component
-   * @param componentObj
-   * @param componentCfg
-   * @private
-   */
-  _addBackendData(componentObj, componentCfg) {
-    $(componentObj)
-      .data('componentCfg', componentCfg)
-      .addClass('backendComponent');
-  }
-
 
   /**
    * This handles the state to set on the backends
@@ -246,8 +234,15 @@ class GuiPanelsBuilder {
     $('#activitySetStatesList').empty();
 
     if(cfg.type === 'activity') {
-      $(cfg.states).each(function(backendId, state) {
-        console.error(state);
+      $(cfg.states).each(function(idx, backendStates) {
+          let backendId = backendStates.backendId;
+          $(backendStates.states).each(function(idx2,state) {
+             if(state.question !== undefined) {
+
+               $('#activitySetStatesList').append(`<a href="#!" class="collection-item">${state.question}</a>`);
+
+             }
+          });
       });
 
       $('#activityQuerstionModal').modal('open');

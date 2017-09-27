@@ -3,8 +3,8 @@
     "port": 3000
   },
   "defaultView": {
-    "type": "backend",
-    "id": "DENON"
+    "type": "activity",
+    "id": "FIRETV"
   },
   "devices": {
     "XBMC_LOCAL": {
@@ -21,43 +21,50 @@
         "adbPath": "/usr/bin/adb"
       }
     },
-    "DENON" : {
-      "type" : "denon",
-      "config" : {
-        "host" : "192.168.0.88",
-        "maxVol" : 60,
-        "inputs" : ["DVD","MPLAY", "BD", "SAT/CBL", "GAME"],
-        "surroundModes" : ["DIRECT", "MCH STEREO"]
+    "DENON": {
+      "type": "denon",
+      "config": {
+        "host": "192.168.0.88",
+        "maxVol": 60,
+        "inputs": [
+          "DVD",
+          "MPLAY",
+          "BD",
+          "SAT/CBL",
+          "GAME"
+        ],
+        "surroundModes": [
+          "DIRECT",
+          "MCH STEREO"
+        ]
       }
     }
   },
-  "activities" : {
-    "FIRETV" : {
-      "panels" : [
-        ["FIRETV_BED.defaultsPanel"],
-        ["DENON.volumePanel"]
+  "activities": {
+    "FIRETV": {
+      "panels": [
+        [
+          "FIRETV_BED.defaultsPanel"
+        ],
+        [
+          "DENON.volumePanel"
+        ]
       ],
-      "states" :
+      "states": [
         {
-          "DENON"  :
-            [
-              {
-                "action" : "POWER"
-              },
-              {
-                "action" : "SETINPUT",
-                "payload" : "SAT"
-              }
-            ]
-          ,
-          "SAMSUNG" :
-          [
+          "backendId": "DENON",
+          "states": [
             {
-              "action" : "Power",
-              "question" :  "Is the Tv turned on ?"
+              "action": "POWER"
+            },
+            {
+              "action": "SETINPUT",
+              "payload": "SAT/CBL",
+              "question": "Is the denon turned on CBL/SAT ?"
             }
           ]
         }
+      ]
     }
   }
 }
