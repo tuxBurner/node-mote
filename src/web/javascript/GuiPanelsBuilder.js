@@ -19,12 +19,12 @@ class GuiPanelsBuilder {
     let parent = $('#left-slide-nav');
     $(parent).empty();
 
-    if(data.activities !== undefined) {
+    if (data.activities !== undefined) {
       $(parent).append('<li><h6>Activities</h6></li><li><div class="divider"></div></li>');
       this._buildSideNavPoints(parent, 'activity', data.activities);
     }
 
-    if(data.backends !== undefined) {
+    if (data.backends !== undefined) {
       $(parent).append('<li><h6>Backends</h6></li><li><div class="divider"></div></li>');
       this._buildSideNavPoints(parent, 'backend', data.backends);
     }
@@ -42,13 +42,13 @@ class GuiPanelsBuilder {
 
     const instance = this;
 
-    for(let idx in navPoints) {
+    for (let idx in navPoints) {
 
       let navPoint = $('<a class="nmNavPoint" href="#!">' + idx + '</a>');
       $(navPoint)
         .data('type', type)
         .data('id', idx)
-        .on('click', function(e) {
+        .on('click', function (e) {
           let type = $(this).data('type');
           let name = $(this).data('id');
           $('.leftSideNavBtn').sideNav('hide');
@@ -72,8 +72,8 @@ class GuiPanelsBuilder {
 
     // mark the state as active in the menu
     $('.nmNavPoint').parent().removeClass('active');
-    $('.nmNavPoint').each(function(idx, obj) {
-      if($(obj).data('type') === cfg.type && $(obj).data('id') === cfg.id) {
+    $('.nmNavPoint').each(function (idx, obj) {
+      if ($(obj).data('type') === cfg.type && $(obj).data('id') === cfg.id) {
         $(obj).parent().addClass('active');
       }
     });
@@ -113,7 +113,7 @@ class GuiPanelsBuilder {
    */
   _handleComponents(parent, components, col) {
     const instance = this;
-    $.each(components, function(idx, component) {
+    $.each(components, function (idx, component) {
       instance._handleComponent(parent, component, col);
     });
   }
@@ -130,7 +130,7 @@ class GuiPanelsBuilder {
     // the generated component dom obj
     let componentObj = null;
 
-    switch(component.type) {
+    switch (component.type) {
       case 'row' :
         componentObj = this._buildRow(component);
         break;
@@ -215,7 +215,7 @@ class GuiPanelsBuilder {
     html += '</div>';
     let componentObj = $(html);
 
-    if(innerComponent !== undefined) {
+    if (innerComponent !== undefined) {
       $(componentObj).append(innerComponent);
     }
 
@@ -233,19 +233,37 @@ class GuiPanelsBuilder {
     // empty the list
     $('#activitySetStatesList').empty();
 
-    if(cfg.type === 'activity') {
-      $(cfg.states).each(function(idx, backendStates) {
-          let backendId = backendStates.backendId;
-          $(backendStates.states).each(function(idx2,state) {
-             if(state.question !== undefined) {
 
-               $('#activitySetStatesList').append(`<a href="#!" class="collection-item">${state.question}</a>`);
+    if (cfg.type === 'activity') {
 
-             }
-          });
+      let showModal = false;
+
+      const instance = this;
+
+      $(cfg.states).each(function (idx, backendStates) {
+        let backendId = backendStates.backendId;
+        $(backendStates.states).each(function (idx2, stateCfg) {
+          if (stateCfg.question !== undefined) {
+            showModal = true;
+            let questionComp = $(`<a href="#!" class="collection-item">${stateCfg.question}</a>`);
+            $(questionComp).data('stateCfg', stateCfg).data('backendId', backendId);
+
+            questionComp.on('click', function () {
+              let stateCfg = $(this).data('stateCfg');
+              let backendId = $(this).data('backendId');
+              instance.websocketHandler.callBackendAction(backendId, stateCfg.action, {val: stateCfg.payload});
+            });
+            $('#activitySetStatesList').append(questionComp);
+          } else {
+            instance.websocketHandler.callBackendAction(backendId, stateCfg.action, {val: stateCfg.payload});
+          }
+
+        });
       });
 
-      $('#activityQuerstionModal').modal('open');
+      if (showModal === true) {
+        $('#activityQuerstionModal').modal('open');
+      }
     }
   }
 
