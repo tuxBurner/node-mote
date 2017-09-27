@@ -25,7 +25,7 @@ class GuiPanelsBuilder {
     }
 
     if (data.backends !== undefined) {
-      $(parent).append('<li><h6>Backends</h6></li><li><div class="divider"></div></li>');
+      $(parent).append('<li><h6>Devices</h6></li><li><div class="divider"></div></li>');
       this._buildSideNavPoints(parent, 'backend', data.backends);
     }
   }
