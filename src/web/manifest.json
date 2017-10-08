@@ -1,0 +1,16 @@
+{
+  "name": "NodeMote",
+  "short_name": "NodeMote",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff",
+  "description": "A simple remote control for your living room",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "images/favicon.ico",
+      "type": "image/x-icon",
+      "sizes": "16x16"
+    }
+  ]
+}
