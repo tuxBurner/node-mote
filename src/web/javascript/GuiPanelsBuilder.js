@@ -135,19 +135,19 @@ class GuiPanelsBuilder {
         componentObj = this._buildRow(component);
         break;
       case 'panel' :
-        componentObj = this._buildPanel(col, component);
+        let panel = new GuiPanelComponent(component, col, this.websocketHandler, this._handleComponent);
+        componentObj = panel.getComponent();
+        //componentObj = this._buildPanel(col, component);
         break;
       case 'abutton' :
-        let guiButton = new GuiActionButton(component, col, this.websocketHandler);
+        let guiButton = new GuiButtonComponent(component, col, this.websocketHandler);
         guiButton.buildHtmlComponent();
         componentObj = guiButton.getComponent();//this._buildCol(col, this._buildActionBtn(component));
         break;
       case 'slider' :
-        //componentObj = this._buildCol(col, this._buildSlider(component));
         let guiSlider = new GuiSliderComponent(component, col, this.websocketHandler);
         guiSlider.buildHtmlComponent();
         componentObj = guiSlider.getComponent();
-
         break;
       case 'switch' :
         let guiSwitch = new GuiSwitchComponent(component, col, this.websocketHandler);

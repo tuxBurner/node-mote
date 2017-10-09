@@ -7,6 +7,7 @@ const {Swipe} = require('../../panels/Swipe');
 
 const {UpdateValueComponentEvent} = require('../../panels/event/UpdateValueComponentEvent');
 const {DisableComponentEvent} = require('../../panels/event/DisableComponentEvent');
+const {HideComponentEvent} = require('../../panels/event/HideComponentEvent');
 
 class XbmcBackendPanels extends BaseBackendPanelHandler {
 
@@ -25,6 +26,20 @@ class XbmcBackendPanels extends BaseBackendPanelHandler {
 
     this._addPanel(defaultButtonsPanel);
 
+
+    // ctrl panel when the play is active
+    let defaultPlayerCtrl = new Panel(this.backendId, 'defaultPlayerCtrl');
+    defaultPlayerCtrl.addRow([
+      new ActionButton(this.backendId, 'Input.Rew', 'REW', 'req'),
+      new ActionButton(this.backendId, 'Input.Pause', 'Pause', 'pause'),
+      new ActionButton(this.backendId, 'Input.Play', 'Play', 'play'),
+      new ActionButton(this.backendId, 'Input.Fwd', 'Fwd', 'fwd')
+    ])
+      .addEvent(new HideComponentEvent('playerInfo', ['none']))
+    ;
+
+
+    // volume panel
     let volumePanel = new Panel(this.backendId, 'volumePanel');
     volumePanel
       .addRow([
@@ -56,6 +71,7 @@ class XbmcBackendPanels extends BaseBackendPanelHandler {
     defaultPanel
       .addRow([defaultButtonsPanel])
       .addRow([swipePanel])
+      .addRow([defaultPlayerCtrl])
       .addRow([volumePanel]);
 
     this._addDefaultPanel(defaultPanel);

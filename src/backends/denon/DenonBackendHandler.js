@@ -34,7 +34,7 @@ class DenonBackendHandler extends BaseBackendHandler {
 
     // listen to power change
     this.denonClient.on('powerChanged', (power) => {
-      if(instance.currentState.power !== power) {
+      if (instance.currentState.power !== power) {
         instance.currentState.power = power;
         instance.getState();
       }
@@ -42,26 +42,24 @@ class DenonBackendHandler extends BaseBackendHandler {
 
     // listen to volume change
     this.denonClient.on('masterVolumeChanged', (volume) => {
-      if(instance.currentState.volume !== volume) {
+      if (instance.currentState.volume !== volume) {
         instance.getState();
       }
     });
 
     // listen to mute change
     this.denonClient.on('muteChanged', (mute) => {
-      if(instance.currentState.mute !== mute) {
+      if (instance.currentState.mute !== mute) {
         instance.getState();
       }
     });
 
     // listen to input change
     this.denonClient.on('inputChanged', (input) => {
-      if(instance.currentState.input !== input) {
+      if (instance.currentState.input !== input) {
         instance.getState();
       }
     });
-
-
 
 
   }
@@ -77,7 +75,7 @@ class DenonBackendHandler extends BaseBackendHandler {
     let promises = [];
     promises.push(this.denonClient.getPower());
 
-    if(this.currentState.power === 'ON') {
+    if (this.currentState.power === 'ON') {
       promises.push(this.denonClient.getInput());
       promises.push(this.denonClient.getMute());
       promises.push(this.denonClient.getSurround());
@@ -85,24 +83,29 @@ class DenonBackendHandler extends BaseBackendHandler {
     }
 
 
-
     const instance = this;
 
     Promise.all(promises)
-      .then(values => {
+      .then(([power,
+               input,
+               mute,
+               surround,
+               volume
+             ]) => {
+          instance.currentState = {
+            input: input,
+            mute: mute,
+            power: power,
+            surround: surround,
+            volume: volume
+          };
 
-        instance.currentState = {
-          input: values[1],
-          mute: values[2],
-          power: values[0],
-          surround: values[3],
-          volume: values[4]
-        };
+          instance.logInfo('Got state from denon: ' + instance.backendName, this.currentState);
 
-        instance.logInfo('Got state from denon: ' + instance.backendName, this.currentState);
-
-        instance.emitBackendState(this.currentState);
-      });
+          instance.emitBackendState(this.currentState);
+        }
+      )
+    ;
   }
 
 

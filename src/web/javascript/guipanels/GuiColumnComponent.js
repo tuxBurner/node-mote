@@ -19,18 +19,17 @@ class GuiColumnComponent extends GuiBaseComponent {
 
   /**
    * Renders the html component
-   * @return {*|jQuery|HTMLElement}
    */
   buildHtmlComponent() {
     let html = '<div class="col center-align s' + this.columnNumber + '">';
     html += '</div>';
     let componentObj = $(html);
 
-    //if(innerComponent !== undefined) {
     this.component = this._buildInnerHtmlComponent();
-    this._addBackendData();
-    $(componentObj).append(this.component);
-    //}
+    if(this.component) {
+      this._addBackendData();
+      $(componentObj).append(this.component);
+    }
 
     this.columnComponent = componentObj;
   }
