@@ -1,7 +1,7 @@
 class GuiActionButton extends GuiColumnComponent {
 
   _buildInnerHtmlComponent() {
-    let html = '<a class="waves-effect waves-light btn"><i class="material-icons left">' + this.cfg.icon + '</i>' + this.cfg.txt + '</a>';
+    let html = '<a class="waves-effect waves-light btn"><i class="material-icons left">' + this.cfg.icon + '</i><div class="hide-on-med-and-down">' + this.cfg.txt + '</div></a>';
 
     let componentObj = $(html);
 

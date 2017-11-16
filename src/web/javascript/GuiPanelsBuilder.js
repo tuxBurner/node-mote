@@ -140,10 +140,9 @@ class GuiPanelsBuilder {
       case 'abutton' :
         let guiButton = new GuiActionButton(component, col, this.websocketHandler);
         guiButton.buildHtmlComponent();
-        componentObj = guiButton.getComponent();//this._buildCol(col, this._buildActionBtn(component));
+        componentObj = guiButton.getComponent();
         break;
       case 'slider' :
-        //componentObj = this._buildCol(col, this._buildSlider(component));
         let guiSlider = new GuiSliderComponent(component, col, this.websocketHandler);
         guiSlider.buildHtmlComponent();
         componentObj = guiSlider.getComponent();

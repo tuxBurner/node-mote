@@ -26,11 +26,9 @@ class GuiColumnComponent extends GuiBaseComponent {
     html += '</div>';
     let componentObj = $(html);
 
-    //if(innerComponent !== undefined) {
     this.component = this._buildInnerHtmlComponent();
     this._addBackendData();
     $(componentObj).append(this.component);
-    //}
 
     this.columnComponent = componentObj;
   }
