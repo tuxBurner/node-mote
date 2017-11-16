@@ -163,6 +163,13 @@ class GuiPanelsBuilder {
         guiSelect.buildHtmlComponent();
         componentObj = guiSelect.getComponent();
         break;
+
+      case 'labelText' :
+        let guiLabelText = new GuiLabelTextComponent(component, col, this.websocketHandler);
+        guiLabelText.buildHtmlComponent();
+        componentObj = guiLabelText.getComponent();
+        break;
+      default: console.error(component.type + ' component not known !');
     }
 
 

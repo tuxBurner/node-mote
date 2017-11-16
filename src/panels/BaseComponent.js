@@ -20,7 +20,7 @@ class BaseComponent {
     this.backendId = backendId;
 
     /**
-     * Events the component reacts ons
+     * Events the component reacts on
      * @type {Array}
      */
     this.events = [];

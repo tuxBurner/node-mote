@@ -4,6 +4,7 @@ const {ActionButton} = require('../../panels/ActionButton');
 const {Slider} = require('../../panels/Slider');
 const {Switch} = require('../../panels/Switch');
 const {Swipe} = require('../../panels/Swipe');
+const {LabelText} = require('../../panels/LabelText');
 
 const {UpdateValueComponentEvent} = require('../../panels/event/UpdateValueComponentEvent');
 const {DisableComponentEvent} = require('../../panels/event/DisableComponentEvent');
@@ -26,6 +27,9 @@ class XbmcBackendPanels extends BaseBackendPanelHandler {
     this._addPanel(defaultButtonsPanel);
 
     let playerPanel = new Panel(this.backendId,'playerButtonsPanel');
+    playerPanel.addRow([
+      new LabelText(this.backendId, 'Currently playing: ','playerItem.item.label')
+    ]);
     playerPanel.addRow([
       new ActionButton(this.backendId, 'Input.ExecuteAction','','skip_previous','skipprevious'),
       new ActionButton(this.backendId, 'Input.ExecuteAction','','skip_previous','analogseekback'),
