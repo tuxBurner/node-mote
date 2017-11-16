@@ -25,6 +25,17 @@ class XbmcBackendPanels extends BaseBackendPanelHandler {
 
     this._addPanel(defaultButtonsPanel);
 
+    let playerPanel = new Panel(this.backendId,'playerButtonsPanel');
+    playerPanel.addRow([
+      new ActionButton(this.backendId, 'Input.ExecuteAction','','skip_previous','skipprevious'),
+      new ActionButton(this.backendId, 'Input.ExecuteAction','','skip_previous','analogseekback'),
+      new ActionButton(this.backendId, 'Input.ExecuteAction','','play_arrow','playpause'),
+      new ActionButton(this.backendId, 'Input.ExecuteAction','','stop','stop'),
+      new ActionButton(this.backendId, 'Input.ExecuteAction','','skip_next','analogseekforward'),
+      new ActionButton(this.backendId, 'Input.ExecuteAction','','skip_next','skipnext')
+    ]);
+    this._addPanel(playerPanel);
+
     let volumePanel = new Panel(this.backendId, 'volumePanel');
     volumePanel
       .addRow([
@@ -56,7 +67,9 @@ class XbmcBackendPanels extends BaseBackendPanelHandler {
     defaultPanel
       .addRow([defaultButtonsPanel])
       .addRow([swipePanel])
-      .addRow([volumePanel]);
+      .addRow([volumePanel])
+      .addRow([playerPanel])
+    ;
 
     this._addDefaultPanel(defaultPanel);
 
