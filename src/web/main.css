@@ -6,3 +6,8 @@
     min-height: 200px;
     min-width: 200px;
 }
+
+
+div.container {
+    margin-top: 25px;
+}
