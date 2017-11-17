@@ -20,6 +20,9 @@ class GuiLabelTextComponent extends GuiColumnComponent {
     let splittedKey = cfgEventObj.keyToListen.split('.');
     let valToDisplay = stateData;
     splittedKey.forEach(function(key) {
+      if(valToDisplay === undefined) {
+        valToDisplay = '';
+      }
       valToDisplay = valToDisplay[key];
     });
 
