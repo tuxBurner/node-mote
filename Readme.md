@@ -31,9 +31,18 @@ call this to get the input remapped
 
 xinput --set-prop 'FT5406 memory based driver' 'Coordinate Transformation Matrix'  0 1 0 -1 0 1 0 0 1
 
+
+## Hide the mousecursor
+
+```bash
+sudo apt-get install unclutter
+```
+
 ## Start chromium in kiosk mode
 
- chromium-browser --disable-infobars --kiosk --disable-pinch --disable-overlay-scrollbar --touch-events http://192.168.0.2:3000
+```bash
+DISPLAY=:0 chromium-browser --disable-infobars --kiosk --disable-pinch  --incognito --disable-overlay-scrollbar --touch-events http://192.168.0.2:3000
+```
 
 
 

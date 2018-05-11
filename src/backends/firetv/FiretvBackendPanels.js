@@ -35,7 +35,7 @@ class FiretvBackendPanels extends BaseBackendPanelHandler {
     let swipePanel = new Panel(this.backendId, 'swipePanel');
     swipePanel
       .addRow([swipeInput]);
-    this._addPanel(swipePanel)
+    this._addPanel(swipePanel);
 
     let defaultPanel = new Panel(this.backendId, 'defaultsPanel');
     defaultPanel

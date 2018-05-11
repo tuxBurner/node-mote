@@ -21,6 +21,13 @@
         "adbPath": "/usr/bin/adb"
       }
     },
+    "FIRETV_WOZI": {
+      "type": "firetv",
+      "config": {
+        "host": "192.168.0.137",
+        "adbPath": "/usr/bin/adb"
+      }
+    },
     "DENON": {
       "type": "denon",
       "config": {
@@ -41,6 +48,32 @@
     }
   },
   "activities": {
+
+    "FIRETV_WOZI" : {
+      "panels": [
+        [
+          "FIRETV_WOZI.defaultsPanel"
+        ],
+        [
+          "DENON.volumePanel"
+        ]
+      ],
+      "states": [
+        {
+          "backendId": "DENON",
+          "states": [
+            {
+              "action": "POWER"
+            },
+            {
+              "action": "SETINPUT",
+              "payload": "SAT/CBL",
+              "question": "Is the denon turned on CBL/SAT ?"
+            }
+          ]
+        }
+      ]
+    },
     "FIRETV": {
       "panels": [
         [
