@@ -33,7 +33,7 @@ xinput --set-prop 'FT5406 memory based driver' 'Coordinate Transformation Matrix
 
 ## Start chromium in kiosk mode
 
- chromium-browser --disable-infobars --kiosk --disable-overlay-scrollbar --touch-events http://192.168.0.2:3000
+ chromium-browser --disable-infobars --kiosk --disable-pinch --disable-overlay-scrollbar --touch-events http://192.168.0.2:3000
 
 
 
