@@ -5,7 +5,11 @@ class GuiSwipeComponent extends GuiColumnComponent {
 
     const instance = this;
 
-    $(componentObj).hammer({recognizers: [[Hammer.Tap], [Hammer.Swipe, {direction: Hammer.DIRECTION_ALL}]]}).bind("swipeleft swiperight swipeup swipedown tap", function(e) {
+    $(componentObj)
+      .hammer({recognizers: [[Hammer.Tap], [Hammer.Press], [Hammer.Swipe, {direction: Hammer.DIRECTION_ALL, threshold: 5, velocity: 0.1}]]})
+      .bind("swipeleft swiperight swipeup swipedown press tap", function(e) {
+
+        console.error(e);
 
       let backendName = instance.cfg.backendId;
       let actionData = instance.cfg[e.type];
