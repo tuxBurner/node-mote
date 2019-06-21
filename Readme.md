@@ -45,6 +45,12 @@ DISPLAY=:0 chromium-browser --disable-infobars --kiosk --disable-pinch  --incogn
 ```
 
 
+## Lirc on the pi
+
+```bash
+sudo apt-get install lirc
+```
+
 
 
 
